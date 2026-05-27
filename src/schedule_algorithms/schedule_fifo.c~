@@ -1,0 +1,11 @@
+#include <schedule_algorithms.h>
+
+
+#include <stdlib.h>
+
+
+uint32_t
+schedule_fifo( cluster_t *c )
+{
+	return EXIT_SUCCESS;
+}
