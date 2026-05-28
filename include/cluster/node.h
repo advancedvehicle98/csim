@@ -27,11 +27,17 @@ typedef uint64_t feature_mask_t;
 #define NODE_FEATURE_ASIC    ( 1UL << 6 )
 
 
-typedef struct __node_load_stats_t {
+typedef struct _node_load_stats_t {
 	float     average_cpu_load;
 	float     average_memory_load;
 	quantum_t average_stall_time;
 } node_load_stats_t;
+
+
+typedef struct _node_occupation_t {
+	size_t mem;
+	size_t *cpu;
+} node_occupation_t;
 
 
 typedef struct _node_t {
@@ -61,10 +67,8 @@ typedef struct _node_t {
 	// нагрузка
 	node_load_stats_t load_stats;
 
-	// кто и кем занят
-	// т.е. в иерархическом порядке:
-	// ядро процессора -> поток
-	job_t ***occupation;
+	// доступность ресурсов
+	node_occupation_t occupation;
 } node_t;
 
 

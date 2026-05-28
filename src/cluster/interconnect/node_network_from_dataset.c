@@ -222,18 +222,8 @@ _parse_bus( __OUT__ interconnect_list_t *ilist,
 
 		_reset_load_stats( &( n[ i ] ) );
 
-		n[ i ].occupation = (job_t ***) malloc( sizeof( job_t ** )*cpu_count );
-
-		if ( ! n[ i ].occupation ) return 0;
-		
-		int thread_count = n[ i ].thread_count;
-
-		for ( int c = 0; c < cpu_count; ++c ) {
-			n[ i ].occupation[ c ] = (job_t **) malloc( sizeof( job_t * )*thread_count );
-
-			for ( int t = 0; t < thread_count; ++t )
-				n[ i ].occupation[ c ][ t ] = NULL;
-		}
+		n[ i ].occupation.mem = 0;
+		n[ i ].occupation.cpu = (size_t *) calloc( cpu_count, sizeof( size_t ) );
 	}
 	
 	return node_count;

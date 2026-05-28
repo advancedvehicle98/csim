@@ -16,6 +16,7 @@ cluster_job_sequence_from_dataset( __STATE__ cluster_t  *c,
 								   __IN__    const char *f )
 {
 	c->job_sequence = NULL;
+	c->job_count = 0;
 	
 	return _cluster_parse_file_wrapper( c, f, _parse_lines );
 }
@@ -113,11 +114,14 @@ _parse_lines( __STATE__ cluster_t  *c,
 				
 			}
 
+			job.assigned_node = NULL;
+
 			line_start = next_space + 1;
 			++term;
 		}
 
 		job.is_finished = false;
+		++( c->job_count );
 
 		cluster_add_job_moment( c, &job, moment );
 	}

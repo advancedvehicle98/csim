@@ -14,13 +14,17 @@ cluster_init( __STATE__       cluster_t   *c,
 			  __IN__    const char        *cf,
 			  __IN__          scheduler_t *s )
 {
-	if ( ! s || ! s->schedule || ! s->init || ! s->fetch ) {
+	if ( ! s || ! s->schedule
+		     || ! s->init
+		     || ! s->distribute
+		     || ! s->destroy ) {
 		_ERROR_PUTS( "В scheduler_t не заполнены все поля" );
 		return EXIT_FAILURE;
 	}
 	
 	uint32_t status;
 
+	s->init( s );
 	c->scheduler = s;
 
 	status = cluster_job_sequence_from_dataset( c, jf );
@@ -82,7 +86,8 @@ _reset_statistics( __OUT__ statistics_t *s )
 	s->total_active_time_quantum = 
 	s->total_active_time_ms      = 0;
 
-	s->jobs_done = 0;
+	s->jobs_done     =
+	s->jobs_complete = 0;
 
 	s->total_average_cpu_load    = 
 	s->total_average_memory_load = 0;		

@@ -24,6 +24,7 @@ typedef struct __job_t {
 	
 	// Ограничения по времени
 	quantum_t max_exec_time, estimated_time, max_wait_time;
+	quantum_t time_before_start; // задержка перед началом выполнения
 
 #ifdef CONFIG_USE_TIME_VARIANCE
 	quantum_t time_variance; // отклонение от estimated_time
@@ -40,6 +41,7 @@ typedef struct __job_t {
 	priority_t priority; // чем меньше значение, тем больше приоритет
 
 	bool is_finished;
+	node_t *assigned_node;
 } job_t;
 
 

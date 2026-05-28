@@ -33,5 +33,4 @@ void cluster_add_job_moment( __STATE__       cluster_t *c,
 							 __IN__    const job_t     *j,
 							 __IN__    const quantum_t  q );
 
-
 #endif // ! __CLUSTER_JOB_SEQUENCER

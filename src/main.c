@@ -70,9 +70,10 @@ uint32_t
 get_schedule_functions( scheduler_t *s, const char *type )
 {
 	if ( _STR_EQUAL( type, "fifo" ) ) {
-		s->schedule = schedule_fifo;
-		s->init = init_fifo;
-		s->fetch = fetch_fifo;
+		s->schedule   = schedule_fifo;
+		s->init       = init_fifo;
+		s->distribute = distribute_fifo;
+		s->destroy    = destroy_fifo;
 		
 		return EXIT_SUCCESS;
 	}

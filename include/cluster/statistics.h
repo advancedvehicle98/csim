@@ -16,7 +16,8 @@ typedef struct __statistics_t {
 	quantum_t total_active_time_quantum;
 	uint64_t  total_active_time_ms;
 
-	size_t jobs_done;
+	size_t jobs_done;     // кол-во выполненных задач (неважно с ошибкой или без)
+	size_t jobs_complete; // кол-во _успешно_ завершённых задач
 
 	float total_average_cpu_load;
 	float total_average_memory_load;

@@ -20,11 +20,11 @@
 typedef struct _cluster_t {
 	struct _interconnect_list_t *connections;
 	struct _job_moment_list_t   *job_sequence;
-	scheduler_t                 *scheduler;
+	struct _scheduler_t         *scheduler;
 	statistics_t                 statistics;
 	
 	node_t* *node_registry;
-	size_t   node_count;
+	size_t   node_count, job_count;
 } cluster_t;
 
 

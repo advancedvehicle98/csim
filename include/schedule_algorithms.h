@@ -5,23 +5,16 @@
 #include <cluster/cluster.h>
 
 
-// итого каждый алгоритм должен делать 3 вещи:
-// 1. init_*     - инициализация очереди
-// 2. shedule_*  - распределение задач по узлам
-// 3. fetch_*    - брать пачку последних задач и реорганизовывать очередь
+// FIFO ----------------------------------------------------
 
-// + должна быть доп. структура, определяющая
-//   как будет организована очередь
-//   это типо поле specs в job_queue_t
+typedef struct _fifo_queue_t {
+	job_list_t *h, *t, *c;
+} fifo_queue_t;
 
-typedef struct __fifo_job_queue_t {
-	
-} fifo_job_queue_t;
-
-
-uint32_t schedule_fifo( cluster_t *c );
-uint32_t init_fifo( job_queue_t *q );
-job_t *fetch_fifo( job_queue_t *q );
+void schedule_fifo( __STATE__ scheduler_t *s, __IN__ node_t* *n, __IN__ size_t n_count );
+uint32_t init_fifo( __STATE__ scheduler_t *s );
+void distribute_fifo( __STATE__ scheduler_t *s, __STATE__ job_list_t *jlist );
+void destroy_fifo( __STATE__ scheduler_t *s );
 
 
 #endif // ! __SCHEDULE_ALGORITHMS
