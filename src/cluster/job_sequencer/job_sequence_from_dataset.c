@@ -1,8 +1,8 @@
 #include <cluster/job_sequence.h>
 
 #include <cluster/defs.h>
+#include <cluster/internal.h>
 
-#include <assert.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -15,27 +15,9 @@ uint32_t
 cluster_job_sequence_from_dataset( __STATE__ cluster_t  *c,
 								   __IN__    const char *f )
 {
-	assert( f );
+	c->job_sequence = NULL;
 	
-	FILE *fp = fopen( f, "r+" );
-
-	if ( ! fp ) {
-		_ERROR_PRINTF( "Не удалось открыть файл %s", f );
-		return EXIT_FAILURE;
-	}
-
-	if ( _parse_lines( c, fp ) == EXIT_FAILURE ) goto _failure;
-	
-	fclose( fp );
-
-	_DEBUG_PRINTF( "Завершён парсинг %s", f );
-	
-	return EXIT_SUCCESS;
-
-_failure:
-	fclose( fp );
-
-	return EXIT_FAILURE;
+	return _cluster_parse_file_wrapper( c, f, _parse_lines );
 }
 
 

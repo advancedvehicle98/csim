@@ -7,15 +7,14 @@
 #include <stddef.h>
 
 
-struct __cluster_t;
-typedef struct __cluster_t cluster_t;
+struct _cluster_t;
 
-typedef uint32_t ( *schedule_func_t )( cluster_t * );
+typedef uint32_t ( *schedule_func_t )( struct _cluster_t * );
 typedef uint32_t ( *init_func_t )( job_queue_t * );
 typedef job_t *( *fetch_func_t )( job_queue_t * );
 
 
-typedef struct __scheduler_t {
+typedef struct _scheduler_t {
 	schedule_func_t schedule;
 	init_func_t     init;
 	fetch_func_t    fetch;

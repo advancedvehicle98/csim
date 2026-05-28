@@ -2,9 +2,13 @@
 #define __CLUSTER_NODE_H
 
 
+#include <cluster/interconnect.h>
 #include <cluster/timing.h>
 
 #include <stddef.h>
+
+
+#define MAX_NODE_NAME_SIZE 32
 
 
 struct __job_t;
@@ -30,8 +34,8 @@ typedef struct __node_load_stats_t {
 } node_load_stats_t;
 
 
-typedef struct __node_t {
-	char *name;
+typedef struct _node_t {
+	char name[ MAX_NODE_NAME_SIZE ];
 
 	// время отклика влияет на то, когда узел готов принять задачу
 	// от планировщика
@@ -40,6 +44,9 @@ typedef struct __node_t {
 #ifdef CONFIG_USE_TIME_VARIANCE
 	quantum_t response_time_variance;
 #endif
+
+	// куда узел подключен
+	struct _interconnect_t *ic;
 
 	// Количественные характеристики
 	size_t mem_size;
@@ -57,7 +64,7 @@ typedef struct __node_t {
 	// кто и кем занят
 	// т.е. в иерархическом порядке:
 	// ядро процессора -> поток
-	job_t **occupation;
+	job_t ***occupation;
 } node_t;
 
 

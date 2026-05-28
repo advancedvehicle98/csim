@@ -17,15 +17,14 @@
 #include <stdint.h>
 
 
-typedef struct __cluster_t {
-	interconnect_t              connections;
-	// хз почему то job_moment_list_t он не переваривает
-	struct __job_moment_list_t *job_sequence;
-	scheduler_t                *scheduler;
-	statistics_t                statistics;
+typedef struct _cluster_t {
+	struct _interconnect_list_t *connections;
+	struct _job_moment_list_t   *job_sequence;
+	scheduler_t                 *scheduler;
+	statistics_t                 statistics;
 	
-	node_t                     *node_registry;
-	size_t                      node_count;
+	node_t* *node_registry;
+	size_t   node_count;
 } cluster_t;
 
 
@@ -39,6 +38,11 @@ void cluster_destroy( __STATE__ cluster_t *c );
 uint32_t cluster_simulate( __STATE__ cluster_t *c );
 
 uint32_t cluster_simulation_step( __STATE__ cluster_t *c );
+
+// тематически эта функция подходит к разделу interconnect
+// но чтобы не было возни с заголовками пока лежит тут
+uint32_t cluster_node_network_from_dataset( __STATE__       cluster_t *c,
+											__IN__    const char      *f );
 
 
 #endif // ! __CLUSTER_H

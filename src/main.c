@@ -7,9 +7,6 @@
 #include <schedule_algorithms.h>
 
 
-#define STR_EQUAL( L, R ) ( strcmp( L, R ) == 0 )
-
-
 uint32_t check_args( const int argc, const char *argv[] );
 uint32_t get_schedule_functions( scheduler_t *s, const char *type );
 void print_available_schedule_types( void );
@@ -72,7 +69,7 @@ check_args( const int   argc,
 uint32_t
 get_schedule_functions( scheduler_t *s, const char *type )
 {
-	if ( STR_EQUAL( type, "fifo" ) ) {
+	if ( _STR_EQUAL( type, "fifo" ) ) {
 		s->schedule = schedule_fifo;
 		s->init = init_fifo;
 		s->fetch = fetch_fifo;

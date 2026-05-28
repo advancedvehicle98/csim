@@ -36,4 +36,7 @@
 #define strtos( S, E, B ) strtol( S, E, B )
 
 
+#define _STR_EQUAL( L, R ) ( strcmp( L, R ) == 0 )
+
+
 #endif // __CLUSTER_DEFS_H

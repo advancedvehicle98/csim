@@ -8,19 +8,19 @@
 #include <stdint.h>
 
 
-struct __cluster_t;
-typedef struct __cluster_t cluster_t;
+struct _cluster_t;
+typedef struct _cluster_t cluster_t;
 
 
 // для динамически назначаемых задач
-typedef struct __job_moment_t {
+typedef struct _job_moment_t {
 	quantum_t   time;
 	job_list_t *job_list_head;
 } job_moment_t;
 
-typedef struct __job_moment_list_t {
-	job_moment_t                moment;
-	struct __job_moment_list_t *next;
+typedef struct _job_moment_list_t {
+	job_moment_t               moment;
+	struct _job_moment_list_t *next;
 } job_moment_list_t;
 
 
