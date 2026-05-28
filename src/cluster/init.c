@@ -18,8 +18,6 @@ uint32_t cluster_init( __STATE__       cluster_t   *c,
 	
 	uint32_t status;
 
-	// указатель на планировщик копируем в первую очередь, т.к.
-	// функции из него нужны для распределения задач по очередям
 	c->scheduler = s;
 
 	c->job_sequence = NULL;

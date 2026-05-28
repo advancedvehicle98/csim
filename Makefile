@@ -47,7 +47,7 @@ clean:
 		$(SRC_DIR)/cluster/*~ \
 		$(SRC_DIR)/cluster/job/*~ \
 		$(SRC_DIR)/cluster/job_sequencer/*~ \
-		$(SRC_DIR)/scheduler_algorithms/*~ \
+		$(SRC_DIR)/schedule_algorithms/*~ \
 		$(INC_DIR)/*~ \
 		$(INC_DIR)/cluster/*~
 

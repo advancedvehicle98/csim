@@ -13,9 +13,9 @@ static void _insert_moment_after_moment( __OUT__       job_moment_list_t *jseq,
 										 __IN__  const job_t             *j,
 										 __IN__  const quantum_t          m );
 
-static void _job_sequence_init( __OUT__ job_moment_list_t* *jseq,
-								__IN__    const job_t      *j,
-								__IN__    const quantum_t   m );
+static void _job_sequence_init( __OUT__         job_moment_list_t* *jseq,
+								__IN__    const job_t              *j,
+								__IN__    const quantum_t           m );
 
 
 void
@@ -105,9 +105,9 @@ _insert_moment_after_moment( __OUT__       job_moment_list_t *jseq,
 
 
 void
-_job_sequence_init( __OUT__         job_moment_list_t* *jseq_out,
-					__IN__    const job_t              *j,
-					__IN__    const quantum_t           m )
+_job_sequence_init( __OUT__       job_moment_list_t* *jseq_out,
+					__IN__  const job_t              *j,
+					__IN__  const quantum_t           m )
 {
 	job_moment_list_t *jseq = (job_moment_list_t *) malloc( sizeof( job_moment_list_t ) );
 
