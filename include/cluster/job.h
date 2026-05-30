@@ -57,8 +57,11 @@ typedef struct __job_list_t {
 	// и для планировщика, т.к. не охота чтобы именно планировщик
 	// рулил последовательностью задач и изменял её, мешая симулятору
 	// обновлять прогресс у задач
-	struct __job_list_t *_next; // для симулятора
-	struct __job_list_t *next;  // для планировщика
+	struct __job_list_t *_next;  // для симулятора
+	struct __job_list_t *next;   // для планировщика
+	struct __job_list_t *next_on_node; // для узла (для логов по крайней мере)
+	struct __job_list_t *prev_on_node; // да задолбали меня эти указатели
+	
 	job_t                job;
 } job_list_t;
 
@@ -69,7 +72,9 @@ void cluster_print_job( __IN__ const job_t* j );
 
 void cluster_print_job_list( __IN__ const job_list_t *jlist );
 
-bool cluster_update_job( __STATE__ job_t        *j,
+void cluster_print_job_truncated( __IN__ const job_t *j );
+
+bool cluster_update_job( __STATE__ job_list_t   *jlist,
 						 __STATE__ statistics_t *s );
 
 

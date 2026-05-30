@@ -35,7 +35,7 @@ cluster_print_job( __IN__ const job_t *j )
 				   "                Требуемые фукнции: " _FEATURES_FMT "\n",
 				   j->name, assigned_node,
 				   j->exec_time, j->estimated_time, j->max_exec_time,
-				   j->wait_time, j->max_wait_time, j->max_wait_time,
+				   j->wait_time, j->max_wait_time, j->time_variance,
 				   j->mem_size, j->cpu_count, j->thread_count, j->priority,
 				   cpu_req, cpu_vec_req, gpu_req, npu_req, tpu_req, fpga_req, asic_req
 				   );

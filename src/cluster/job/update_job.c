@@ -5,9 +5,11 @@
 
 // возвращает true, если задача завершилась
 bool
-cluster_update_job( __STATE__ job_t        *j,
+cluster_update_job( __STATE__ job_list_t   *jlist,
 					__STATE__ statistics_t *s )
 {
+	job_t *j = &( jlist->job );
+	
 	if ( j->is_done ) return true;
 
 	// мы уже не берём в учет задачи, которые слишком долго ждали
@@ -44,5 +46,8 @@ cluster_update_job( __STATE__ job_t        *j,
  __job_done:
 	j->is_done = true;
 	++( s->jobs_done );
+
+	cluster_remove_job_from_node( jlist );
+	
 	return true;
 }

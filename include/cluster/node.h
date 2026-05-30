@@ -79,6 +79,9 @@ typedef struct _node_t {
 
 	// доступность ресурсов
 	node_occupation_t occupation;
+
+	// господин просит больше указателей
+	job_list_t *jobs;
 } node_t;
 
 
@@ -87,8 +90,10 @@ bool cluster_check_node_for_job( __IN__ const job_t  *j,
 
 void cluster_print_node_status( __IN__ const node_t *n );
 
-void cluster_put_job_to_node( __STATE__ job_t  *j,
-							  __STATE__ node_t *n );
+void cluster_put_job_to_node( __STATE__ job_list_t *jlist,
+							  __STATE__ node_t     *n );
+
+void cluster_remove_job_from_node( __STATE__ job_list_t *jlist );
 
 void cluster_update_node( __STATE__ node_t *n,
 						  __STATE__ statistics_t *s );

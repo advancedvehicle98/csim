@@ -218,7 +218,8 @@ _parse_bus( __OUT__ interconnect_list_t *ilist,
 
 		n[ i ].cpu_count = cpu_count;
 		n[ i ].exec_rate = n[ i ].max_exec_rate;
-		n[ i ].ic        = (interconnect_t *) bcon;
+		n[ i ].ic        = &ilist->ic;
+		n[ i ].jobs      = NULL;
 
 		_reset_load_stats( &( n[ i ] ) );
 

@@ -23,8 +23,7 @@ cluster_simulation_step( __STATE__ cluster_t       *c,
 		job_list_t *jl = jm->moment.job_list_head;
 
 		for ( ; jl; jl = jl->next )
-			is_everything_done &= cluster_update_job( &jl->job,
-													  &c->statistics );
+			is_everything_done &= cluster_update_job( jl, &c->statistics );
 
 		jm->is_everything_done = is_everything_done;
 	}

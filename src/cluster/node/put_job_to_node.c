@@ -12,9 +12,11 @@ static quantum_t _evaluate_time_before_start( const node_t *n );
 // можно разместить на узле
 
 void
-cluster_put_job_to_node( __STATE__ job_t  *j,
-						 __STATE__ node_t *n )
+cluster_put_job_to_node( __STATE__ job_list_t *jlist,
+						 __STATE__ node_t     *n )
 {
+	job_t *j = &( jlist->job );
+	
 	j->assigned_node = n;
 	j->time_before_start = _evaluate_time_before_start( n );
 
@@ -51,6 +53,22 @@ cluster_put_job_to_node( __STATE__ job_t  *j,
 			
 			--cpu_count;
 		}
+
+	if ( ! n->jobs ) {
+		jlist->prev_on_node = NULL;
+		n->jobs = jlist;
+		goto _put_job_to_node_continue;
+	}
+
+	job_list_t *t = n->jobs, *next = t->next_on_node;
+	
+	for ( ; next; t = next, next = next->next_on_node );
+
+	t->next_on_node = jlist;
+	jlist->prev_on_node = t;
+
+ _put_job_to_node_continue:
+	jlist->next_on_node = NULL;
 }
 
 
@@ -59,16 +77,10 @@ _evaluate_time_before_start( const node_t *n )
 {
 	quantum_t t = n->response_time;
 
-	switch ( n->ic->type ) {
+	quantum_t mn = n->ic->delay_min;
+	quantum_t mx = n->ic->delay_max;
 		
-	case IC_TYPE_BUS: {
-		quantum_t mn = n->ic->delay_min;
-		quantum_t mx = n->ic->delay_max;
-		
-		t += ( rand() % ( mx - mn ) ) + mn;
-	} break;
-		
-	}
+	t += ( rand() % ( mx - mn ) ) + mn;
 	
 	return t;
 }

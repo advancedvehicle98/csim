@@ -17,8 +17,8 @@ schedule_fifo( __STATE__ scheduler_t *s,
 	fifo_queue_t *q = (fifo_queue_t *) s->state;
 	job_list_t *c = q->c;
 
-	// пропускаем задачи, которые уже готовы
-	while ( c && c->job.is_done ) c = c->next;
+	// пропускаем задачи, которые уже назначены
+	while ( c && c->job.assigned_node ) c = c->next;
 
 	// чтобы в след. раз не проходиться по сделанным задачам
 	q->c = c;
@@ -33,7 +33,7 @@ schedule_fifo( __STATE__ scheduler_t *s,
 
 		if ( ! n ) goto _schedule_fifo_continue;
 
-		cluster_put_job_to_node( j, n );
+		cluster_put_job_to_node( c, n );
 
 _schedule_fifo_continue:
 		c = c->next;
