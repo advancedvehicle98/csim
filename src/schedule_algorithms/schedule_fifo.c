@@ -82,12 +82,6 @@ _distribute_get_tail:
 void
 destroy_fifo( __IN__ scheduler_t *s )
 {
-	fifo_queue_t *q = (fifo_queue_t *) s->state;
-	job_list_t *h = q->h, *n = h->next;
-	
-	for ( ; n; h = n, n = h->next ) free( h );
-
-	free( q->t );
 	free( s->state );
 }
 

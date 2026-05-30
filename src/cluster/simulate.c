@@ -28,20 +28,20 @@ cluster_simulate( __STATE__ cluster_t *c )
 			_DEBUG_PUTS( "\tНовые задачи:" );
 			cluster_print_job_list( new_jlist );
 			
-			// здесь уже s становится владельцем jseq->moment.job_list_head
-			// т.е. s берёт на себя ответственность за очистку
-			// памяти от задач
 			s->distribute( s, new_jlist );
 			jseq = jseq->next;
 		}
 
 		s->schedule( s, node_registry, node_count );
-				
-		// ---- ДЛЯ ДЕБАГА ---------------
-		c->statistics.jobs_done = c->job_count;
-		// ----------------------
+
+		cluster_simulation_step( c, t++ );
+
+		_DEBUG_PUTS( "-------------------------------------------------------------------\n"
+			   "                                      УЗЛЫ\n"
+			   "      -------------------------------------------------------------------" );
 		
-		++t;
+		for ( int n = 0; n < node_count; ++n )
+			cluster_print_node_status( node_registry[ n ] );
 	}
 	
 	return EXIT_SUCCESS;

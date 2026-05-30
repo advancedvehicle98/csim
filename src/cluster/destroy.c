@@ -6,7 +6,7 @@
 static void _destroy_bus( __STATE__ bus_connection_t* bus );
 static void _destroy_connection( __STATE__ interconnect_t *con );
 static void _destroy_connections( __STATE__ interconnect_list_t *cons );
-/* static void _destroy_job_list( __STATE__ job_list_t *jlist ); */
+static void _destroy_job_list( __STATE__ job_list_t *jlist );
 static void _destroy_job_sequence( __STATE__ job_moment_list_t *jseq );
 static void _destroy_node( __STATE__ node_t* n );
 static void _destroy_scheduler( __STATE__ scheduler_t *s );
@@ -57,13 +57,15 @@ _destroy_connections( __STATE__ interconnect_list_t *cons )
 }
 
 
-/* void */
-/* _destroy_job_list( __STATE__ job_list_t *jlist ) */
-/* { */
-/* 	job_list_t *next = jlist->next; */
+void
+_destroy_job_list( __STATE__ job_list_t *jlist )
+{
+	job_list_t *next = jlist->_next;
 
-/* 	for ( ; next; jlist = next, next = jlist->next ) free( jlist ); */
-/* } */
+	for ( ; next; jlist = next, next = jlist->_next ) free( jlist );
+	
+	free( jlist );
+}
 
 
 void
@@ -71,12 +73,10 @@ _destroy_job_sequence( __STATE__ job_moment_list_t *jseq )
 {
 	job_moment_list_t *next = jseq->next;
 
-	/* for ( ; next; jseq = next, next = jseq->next ) { */
-	/* 	_destroy_job_list( jseq->moment.job_list_head ); */
-	/* 	free( jseq ); */
-	/* } */
-
-	for ( ; next; jseq = next, next = jseq->next ) free( jseq );
+	for ( ; next; jseq = next, next = jseq->next ) {
+		_destroy_job_list( jseq->moment.job_list_head );
+		free( jseq );
+	}
 
 	free( jseq );
 }

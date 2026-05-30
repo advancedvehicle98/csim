@@ -236,11 +236,12 @@ _parse_bus( __OUT__ interconnect_list_t *ilist,
 void
 _reset_load_stats( __STATE__ node_t *n )
 {
-	n->load_stats.average_cpu_load    =
-	n->load_stats.average_memory_load = 0.0f;
+	n->load_stats.average_cpu_load =
+	n->load_stats.memory_load      = 0.0f;
 
-	n->load_stats.average_cpu_stall_time =
-	n->load_stats.node_stall_time        = 0;
+	n->load_stats.average_cpu_load_sc = 0;
+		
+	n->load_stats.node_stall_time = 0;
 }
 
 

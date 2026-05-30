@@ -85,15 +85,17 @@ _populate_node_registry( __STATE__ cluster_t *c )
 void
 _reset_statistics( __OUT__ statistics_t *s )
 {
-	s->average_stall_time        =
-	s->average_wait_time         =
-	s->average_exec_time         =
-	s->total_active_time_quantum = 
-	s->total_active_time_ms      = 0;
+	s->average_stall_time  =
+	s->average_wait_time   =
+	s->average_cpu_load    =
+	s->average_memory_load = 0.0f;
+
+	s->average_stall_time_sc  =
+	s->average_cpu_load_sc    =
+	s->average_memory_load_sc = 0;
 
 	s->jobs_done     =
 	s->jobs_complete = 0;
 
-	s->total_average_cpu_load    = 
-	s->total_average_memory_load = 0;		
+	s->total_active_time_quantum = 0;
 }

@@ -48,7 +48,7 @@ _add_job_to_moment( __OUT__       job_moment_list_t *jseq,
 
 	if ( ! l ) {
 		l = (job_list_t *) malloc( sizeof( job_list_t ) );
-		l->next = NULL;
+		l->_next = l->next = NULL;
 		cluster_copy_job( &l->job, j );
 
 		jseq->moment.job_list_head = l;
@@ -56,12 +56,13 @@ _add_job_to_moment( __OUT__       job_moment_list_t *jseq,
 		return;
 	}
 
-	for ( ; l->next ; l = l->next );
+	for ( ; l->_next ; l = l->_next );
 
-	l->next = (job_list_t *) malloc( sizeof( job_list_t ) );
+	l->_next = (job_list_t *) malloc( sizeof( job_list_t ) );
+	l->next = l->_next;
 
-	l->next->next = NULL;
-	cluster_copy_job( &l->next->job, j );
+	l->_next->next = l->_next->_next = NULL;
+	cluster_copy_job( &l->_next->job, j );
 }
 
 
@@ -96,7 +97,9 @@ _insert_moment_after_moment( __OUT__       job_moment_list_t *jseq,
 
 	job_moment_list_t *new = jseq->next;
 
-	new->next = next;
+	new->next               = next;
+	new->is_everything_done = false;
+	
 	new->moment.time = m;
 
 	_add_job_to_moment( new, j );
@@ -110,7 +113,8 @@ _job_sequence_init( __OUT__       job_moment_list_t* *jseq_out,
 {
 	job_moment_list_t *jseq = (job_moment_list_t *) malloc( sizeof( job_moment_list_t ) );
 
-	jseq->next = NULL;
+	jseq->next               = NULL;
+	jseq->is_everything_done = false;
 		
 	jseq->moment.time = m;
 	jseq->moment.job_list_head = (job_list_t *) malloc( sizeof( job_list_t ) );

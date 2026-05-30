@@ -8,19 +8,30 @@
 #include <stdint.h>
 
 
+// sc - это sample count
+// штобы не шибко длинно было
+
 typedef struct __statistics_t {
-	quantum_t average_stall_time;
-	quantum_t average_wait_time;
-	quantum_t average_exec_time;
+	// среднее время простоя узлов
+	float average_stall_time;
+	size_t average_stall_time_sc;
+
+	// среднее время ожидания задачи
+	// рассчитывается после симуляции
+	float average_wait_time;
+
+	// средняя нагрузка на одно ядро узла
+	float average_cpu_load;
+	size_t average_cpu_load_sc;
+
+	// средняя занятось памяти
+	float average_memory_load;
+	size_t average_memory_load_sc;
 
 	quantum_t total_active_time_quantum;
-	uint64_t  total_active_time_ms;
-
+	
 	size_t jobs_done;     // кол-во выполненных задач (неважно с ошибкой или без)
 	size_t jobs_complete; // кол-во _успешно_ завершённых задач
-
-	float total_average_cpu_load;
-	float total_average_memory_load;
 } statistics_t;
 
 

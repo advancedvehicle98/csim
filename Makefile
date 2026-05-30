@@ -10,10 +10,13 @@ OBJ = main.o \
 	cluster/job/copy_job.o \
 	cluster/job/print_job.o \
 	cluster/job/print_job_list.o \
+	cluster/job/update_job.o \
 	cluster/job_sequencer/add_job_moment.o \
 	cluster/job_sequencer/job_sequence_from_dataset.o \
 	cluster/node/check_node_for_job.o \
+	cluster/node/print_node_status.o \
 	cluster/node/put_job_to_node.o \
+	cluster/node/update_node.o \
 	schedule_algorithms/schedule_fifo.o
 
 BUILD_DIR = ./build

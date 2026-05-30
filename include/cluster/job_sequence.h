@@ -22,6 +22,7 @@ typedef struct _job_moment_t {
 typedef struct _job_moment_list_t {
 	job_moment_t               moment;
 	struct _job_moment_list_t *next;
+	bool is_everything_done;
 } job_moment_list_t;
 
 

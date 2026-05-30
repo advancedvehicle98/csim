@@ -38,7 +38,7 @@ void cluster_destroy( __STATE__ cluster_t *c );
 
 uint32_t cluster_simulate( __STATE__ cluster_t *c );
 
-uint32_t cluster_simulation_step( __STATE__ cluster_t *c );
+uint32_t cluster_simulation_step( __STATE__ cluster_t *c, __IN__ const quantum_t t );
 
 // тематически эта функция подходит к разделу interconnect
 // но чтобы не было возни с заголовками пока лежит тут

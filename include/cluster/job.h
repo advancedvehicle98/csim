@@ -3,6 +3,7 @@
 
 
 #include <cluster/defs.h>
+#include <cluster/statistics.h>
 #include <cluster/timing.h>
 
 #include <stdbool.h>
@@ -52,7 +53,12 @@ typedef struct __job_t {
 
 
 typedef struct __job_list_t {
-	struct __job_list_t *next;
+	// пришлось зделать по два указателя для симулятора
+	// и для планировщика, т.к. не охота чтобы именно планировщик
+	// рулил последовательностью задач и изменял её, мешая симулятору
+	// обновлять прогресс у задач
+	struct __job_list_t *_next; // для симулятора
+	struct __job_list_t *next;  // для планировщика
 	job_t                job;
 } job_list_t;
 
@@ -62,6 +68,9 @@ void cluster_copy_job( __OUT__ job_t *dest, __IN__ const job_t *src );
 void cluster_print_job( __IN__ const job_t* j );
 
 void cluster_print_job_list( __IN__ const job_list_t *jlist );
+
+bool cluster_update_job( __STATE__ job_t        *j,
+						 __STATE__ statistics_t *s );
 
 
 #endif // ! __CLUSTER_JOB_H

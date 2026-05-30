@@ -34,9 +34,11 @@ inline bool _requires_asic   ( const job_t *j ) { return j->required_features & 
 
 
 typedef struct _node_load_stats_t {
-	float     average_cpu_load;
-	float     average_memory_load;
-	quantum_t average_cpu_stall_time;
+	float average_cpu_load;
+	size_t average_cpu_load_sc;
+	
+	float memory_load;
+	
 	quantum_t node_stall_time;
 } node_load_stats_t;
 
@@ -83,8 +85,13 @@ typedef struct _node_t {
 bool cluster_check_node_for_job( __IN__ const job_t  *j,
 								 __IN__ const node_t *n );
 
+void cluster_print_node_status( __IN__ const node_t *n );
+
 void cluster_put_job_to_node( __STATE__ job_t  *j,
 							  __STATE__ node_t *n );
+
+void cluster_update_node( __STATE__ node_t *n,
+						  __STATE__ statistics_t *s );
 
 
 #endif // ! __CLUSTER_NODE_H
