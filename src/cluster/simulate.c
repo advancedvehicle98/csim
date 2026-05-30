@@ -23,11 +23,15 @@ cluster_simulate( __STATE__ cluster_t *c )
 
 		// для динамической планировки
 		if ( jseq && t == jseq->moment.time ) {
+			job_list_t *new_jlist = jseq->moment.job_list_head;
+			
 			_DEBUG_PUTS( "\tНовые задачи:" );
+			cluster_print_job_list( new_jlist );
+			
 			// здесь уже s становится владельцем jseq->moment.job_list_head
 			// т.е. s берёт на себя ответственность за очистку
 			// памяти от задач
-			s->distribute( s, jseq->moment.job_list_head );
+			s->distribute( s, new_jlist );
 			jseq = jseq->next;
 		}
 

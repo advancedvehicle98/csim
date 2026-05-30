@@ -13,6 +13,7 @@
 #include <cluster/statistics.h>
 #include <cluster/timing.h>
 
+#include <pthread.h>
 #include <stddef.h>
 #include <stdint.h>
 
@@ -43,6 +44,11 @@ uint32_t cluster_simulation_step( __STATE__ cluster_t *c );
 // но чтобы не было возни с заголовками пока лежит тут
 uint32_t cluster_node_network_from_dataset( __STATE__       cluster_t *c,
 											__IN__    const char      *f );
+
+void cluster_node_network_from_dataset_start( __OUT__         uint32_t  *s,
+											  __OUT__         pthread_t *p,
+											  __STATE__       cluster_t *c,
+											  __IN__    const char      *f );
 
 
 #endif // ! __CLUSTER_H

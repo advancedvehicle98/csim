@@ -114,17 +114,42 @@ _parse_lines( __STATE__ cluster_t  *c,
 				
 			}
 
-			job.assigned_node = NULL;
-
 			line_start = next_space + 1;
 			++term;
 		}
 
-		job.is_finished = false;
+		job.exec_time = job.wait_time = job.time_before_start = 0;
+		job.assigned_node = NULL;
+		job.is_done = job.is_complete = false;
+		
 		++( c->job_count );
 
 		cluster_add_job_moment( c, &job, moment );
 	}
 
 	return EXIT_SUCCESS;
+}
+
+
+static void *
+_start_thread( void *args )
+{
+	_parse_file_thread_arg_t *a = (_parse_file_thread_arg_t *) args;
+	*( a->s ) = cluster_job_sequence_from_dataset( a->c, a->f );
+	return NULL;
+}
+
+void
+cluster_job_sequence_from_dataset_start( __OUT__         uint32_t  *s,
+										 __OUT__         pthread_t *p,
+										 __STATE__       cluster_t *c,
+										 __IN__    const char      *f )
+{
+	_parse_file_thread_arg_t args = {
+		.s = s,
+		.c = c,
+		.f = f
+	};
+
+	pthread_create( p, NULL, _start_thread, (void *) &args );
 }

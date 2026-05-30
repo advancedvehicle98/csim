@@ -85,7 +85,7 @@ _destroy_job_sequence( __STATE__ job_moment_list_t *jseq )
 void
 _destroy_node( __STATE__ node_t* n )
 {
-	free( n->occupation.cpu );
+	free( n->occupation.cpu_threads );
 }
 
 

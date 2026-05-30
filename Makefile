@@ -8,8 +8,12 @@ OBJ = main.o \
 	cluster/internal/parse_file_wrapper.o \
 	cluster/interconnect/node_network_from_dataset.o \
 	cluster/job/copy_job.o \
+	cluster/job/print_job.o \
+	cluster/job/print_job_list.o \
 	cluster/job_sequencer/add_job_moment.o \
 	cluster/job_sequencer/job_sequence_from_dataset.o \
+	cluster/node/check_node_for_job.o \
+	cluster/node/put_job_to_node.o \
 	schedule_algorithms/schedule_fifo.o
 
 BUILD_DIR = ./build
@@ -17,13 +21,13 @@ SRC_DIR   = ./src
 INC_DIR   = ./include
 
 CFLAGS = \
-	-O2 -g \
+	-O2 -g -DCONFIG_WITH_DEBUG_PRINT \
 	-I $(INC_DIR)
-LDFLAGS = 
+LDFLAGS = -lpthread
 
 OBJ_IN_BUILD_DIR = $(foreach O,$(OBJ),$(BUILD_DIR)/$(O))
 
-COMPONENTS = interconnect internal job job_sequencer
+COMPONENTS = interconnect internal job job_sequencer node
 
 
 all: build_dir link

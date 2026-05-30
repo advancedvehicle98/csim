@@ -222,8 +222,11 @@ _parse_bus( __OUT__ interconnect_list_t *ilist,
 
 		_reset_load_stats( &( n[ i ] ) );
 
-		n[ i ].occupation.mem = 0;
-		n[ i ].occupation.cpu = (size_t *) calloc( cpu_count, sizeof( size_t ) );
+		n[ i ].occupation.mem = n[ i ].mem_size;
+		n[ i ].occupation.cpu_threads = (size_t *) calloc( cpu_count, sizeof( size_t ) );
+
+		for ( size_t c = 0; c < cpu_count; ++c )
+			n[ i ].occupation.cpu_threads[ c ] = n[ i ].thread_count;
 	}
 	
 	return node_count;
@@ -236,5 +239,30 @@ _reset_load_stats( __STATE__ node_t *n )
 	n->load_stats.average_cpu_load    =
 	n->load_stats.average_memory_load = 0.0f;
 
-	n->load_stats.average_stall_time = 0;
+	n->load_stats.average_cpu_stall_time =
+	n->load_stats.node_stall_time        = 0;
+}
+
+
+static void *
+_start_thread( void *args )
+{
+	_parse_file_thread_arg_t *a = (_parse_file_thread_arg_t *) args;
+	*( a->s ) = cluster_node_network_from_dataset( (cluster_t *) a->c, (const char *) a->f );
+	return NULL;
+}
+
+void
+cluster_node_network_from_dataset_start( __OUT__         uint32_t  *s,
+										 __OUT__         pthread_t *p,
+										 __STATE__       cluster_t *c,
+										 __IN__    const char      *f )
+{
+	_parse_file_thread_arg_t args = {
+		.s = s,
+		.c = c,
+		.f = f
+	};
+
+	pthread_create( p, NULL, _start_thread, &args );
 }

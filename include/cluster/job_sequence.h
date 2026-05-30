@@ -4,6 +4,7 @@
 
 #include <cluster/cluster.h>
 
+#include <pthread.h>
 #include <stddef.h>
 #include <stdint.h>
 
@@ -29,8 +30,14 @@ typedef struct _job_moment_list_t {
 uint32_t cluster_job_sequence_from_dataset( __STATE__ cluster_t  *c,
 											__IN__    const char *f );
 
+void cluster_job_sequence_from_dataset_start( __OUT__         uint32_t  *s,
+											  __OUT__         pthread_t *p,
+											  __STATE__       cluster_t *c,
+											  __IN__    const char      *f );
+
 void cluster_add_job_moment( __STATE__       cluster_t *c,
 							 __IN__    const job_t     *j,
 							 __IN__    const quantum_t  q );
+
 
 #endif // ! __CLUSTER_JOB_SEQUENCER

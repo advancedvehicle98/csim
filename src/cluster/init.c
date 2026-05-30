@@ -1,6 +1,8 @@
 #include <cluster/cluster.h>
 
+#include <pthread.h>
 #include <stdlib.h>
+#include <time.h>
 
 
 static void _populate_node_registry( __STATE__ cluster_t *c );
@@ -46,6 +48,9 @@ cluster_init( __STATE__       cluster_t   *c,
 	_reset_statistics( &( c->statistics ) );
 
 	_DEBUG_PUTS( "Кластер инициализирован" );
+
+	// потому что потом всё равно че то надо генерировать
+	srand( time( NULL) );
 	
 	return EXIT_SUCCESS;
 }

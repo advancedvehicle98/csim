@@ -2,20 +2,15 @@
 #define __CLUSTER_NODE_H
 
 
+#include <cluster/defs.h>
 #include <cluster/interconnect.h>
+#include <cluster/job.h>
 #include <cluster/timing.h>
 
 #include <stddef.h>
 
 
 #define MAX_NODE_NAME_SIZE 32
-
-
-struct __job_t;
-typedef struct __job_t job_t;
-
-
-typedef uint64_t feature_mask_t;
 
 
 #define NODE_FEATURE_CPU     ( 1UL << 0 )
@@ -27,16 +22,29 @@ typedef uint64_t feature_mask_t;
 #define NODE_FEATURE_ASIC    ( 1UL << 6 )
 
 
+inline bool _requires_cpu    ( const job_t *j ) { return j->required_features & NODE_FEATURE_CPU; }
+inline bool _requires_cpu_vec( const job_t *j ) { return j->required_features & NODE_FEATURE_CPU_VEC; }
+inline bool _requires_gpu    ( const job_t *j ) { return j->required_features & NODE_FEATURE_GPU; }
+inline bool _requires_npu    ( const job_t *j ) { return j->required_features & NODE_FEATURE_NPU; }
+inline bool _requires_tpu    ( const job_t *j ) { return j->required_features & NODE_FEATURE_TPU; }
+inline bool _requires_fpga   ( const job_t *j ) { return j->required_features & NODE_FEATURE_FPGA; }
+inline bool _requires_asic   ( const job_t *j ) { return j->required_features & NODE_FEATURE_ASIC; }
+
+#define _FEATURES_FMT "%s%s%s%s%s%s%s"
+
+
 typedef struct _node_load_stats_t {
 	float     average_cpu_load;
 	float     average_memory_load;
-	quantum_t average_stall_time;
+	quantum_t average_cpu_stall_time;
+	quantum_t node_stall_time;
 } node_load_stats_t;
 
 
+// не смотря на название стурктуры, она как
+// раз показывает, сколько ресурсов СВОБОДНО
 typedef struct _node_occupation_t {
-	size_t mem;
-	size_t *cpu;
+	size_t mem, *cpu_threads;
 } node_occupation_t;
 
 
@@ -70,6 +78,13 @@ typedef struct _node_t {
 	// доступность ресурсов
 	node_occupation_t occupation;
 } node_t;
+
+
+bool cluster_check_node_for_job( __IN__ const job_t  *j,
+								 __IN__ const node_t *n );
+
+void cluster_put_job_to_node( __STATE__ job_t  *j,
+							  __STATE__ node_t *n );
 
 
 #endif // ! __CLUSTER_NODE_H
