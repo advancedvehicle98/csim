@@ -258,11 +258,7 @@ cluster_node_network_from_dataset_start( __OUT__         uint32_t  *s,
 										 __STATE__       cluster_t *c,
 										 __IN__    const char      *f )
 {
-	_parse_file_thread_arg_t args = {
-		.s = s,
-		.c = c,
-		.f = f
-	};
+	_parse_file_thread_arg_t args = { .s = s, .c = c, .f = f };
 
 	pthread_create( p, NULL, _start_thread, &args );
 }

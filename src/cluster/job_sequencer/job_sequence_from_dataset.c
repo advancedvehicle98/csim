@@ -131,6 +131,11 @@ _parse_lines( __STATE__ cluster_t  *c,
 }
 
 
+// к сожалению это говно не работает
+// оно работает лучше, если добавить задержку между вызовами потоков,
+// так увеличивается шанс того, что имя файла не превратиться в кашу
+// но он всё равно довольно мизерный
+// почему это происходит вапще не понятна
 static void *
 _start_thread( void *args )
 {
@@ -145,11 +150,7 @@ cluster_job_sequence_from_dataset_start( __OUT__         uint32_t  *s,
 										 __STATE__       cluster_t *c,
 										 __IN__    const char      *f )
 {
-	_parse_file_thread_arg_t args = {
-		.s = s,
-		.c = c,
-		.f = f
-	};
+	_parse_file_thread_arg_t args = { .s = s, .c = c, .f = f };
 
 	pthread_create( p, NULL, _start_thread, (void *) &args );
 }
