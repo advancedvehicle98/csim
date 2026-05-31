@@ -1,6 +1,7 @@
 #include <schedule_algorithms.h>
 
 #include <stddef.h>
+#include <stdio.h>
 #include <stdlib.h>
 
 
@@ -80,7 +81,7 @@ _distribute_get_tail:
 
 
 void
-destroy_fifo( __IN__ scheduler_t *s )
+destroy_fifo( __STATE__ scheduler_t *s )
 {
 	free( s->state );
 }
@@ -96,4 +97,26 @@ _pick_node( __IN__ const job_t   *j,
 			return nodes[ i ];
 
 	return NULL;
+}
+
+
+void
+print_fifo( __IN__ scheduler_t *s )
+{
+	fifo_queue_t *q = (fifo_queue_t *) s->state;
+
+	job_list_t *c = q->c;
+
+	_DEBUG_PUTS( "\n\n-------------------------------------------------------------------\n"
+			   "                                ОЧЕРЕДЬ\n"
+			   "-------------------------------------------------------------------" );
+
+	if ( ! c ) {
+		_DEBUG_PUTS( "  Нет задач в очереди" );
+		return;
+	}
+
+	for ( ; c; c = c->next )
+		if ( ! c->job.assigned_node && ! c->job.is_done )
+			cluster_print_job_truncated( &( c->job ) );
 }

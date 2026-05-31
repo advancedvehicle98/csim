@@ -220,7 +220,9 @@ _parse_bus( __OUT__ interconnect_list_t *ilist,
 		n[ i ].exec_rate = n[ i ].max_exec_rate;
 		n[ i ].ic        = &ilist->ic;
 		n[ i ].jobs      = NULL;
-
+		
+		cluster_get_feature_string( n[ i ].feature_str, n[ i ].features );
+			
 		_reset_load_stats( &( n[ i ] ) );
 
 		n[ i ].occupation.mem = n[ i ].mem_size;
@@ -239,8 +241,6 @@ _reset_load_stats( __STATE__ node_t *n )
 {
 	n->load_stats.average_cpu_load =
 	n->load_stats.memory_load      = 0.0f;
-
-	n->load_stats.average_cpu_load_sc = 0;
 		
 	n->load_stats.node_stall_time = 0;
 }

@@ -15,10 +15,12 @@ OBJ = main.o \
 	cluster/job_sequencer/add_job_moment.o \
 	cluster/job_sequencer/job_sequence_from_dataset.o \
 	cluster/node/check_node_for_job.o \
+	cluster/node/get_feature_string.o \
 	cluster/node/print_node_status.o \
 	cluster/node/put_job_to_node.o \
 	cluster/node/remove_job_from_node.o \
 	cluster/node/update_node.o \
+	cluster/statistics/print_statistics.o \
 	schedule_algorithms/schedule_fifo.o
 
 BUILD_DIR = ./build
@@ -32,7 +34,7 @@ LDFLAGS = -lpthread
 
 OBJ_IN_BUILD_DIR = $(foreach O,$(OBJ),$(BUILD_DIR)/$(O))
 
-COMPONENTS = interconnect internal job job_sequencer node
+COMPONENTS = interconnect internal job job_sequencer node statistics
 
 
 all: build_dir link

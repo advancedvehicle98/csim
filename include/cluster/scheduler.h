@@ -15,6 +15,7 @@ typedef void      ( *destroy_func_t )( scheduler_t * );
 typedef void      ( *distribute_func_t )( scheduler_t *, job_list_t * );
 typedef uint32_t  ( *init_func_t )( scheduler_t * );
 typedef void      ( *schedule_func_t )( scheduler_t *, node_t* *, size_t );
+typedef void      ( *print_func_t )( scheduler_t * );
 
 
 typedef struct _scheduler_t {
@@ -22,6 +23,7 @@ typedef struct _scheduler_t {
 	init_func_t       init;
 	distribute_func_t distribute;
 	destroy_func_t    destroy;
+	print_func_t      print;
 
 	void *state;
 } scheduler_t;

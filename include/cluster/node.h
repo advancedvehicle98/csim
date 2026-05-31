@@ -11,6 +11,7 @@
 
 
 #define MAX_NODE_NAME_SIZE 32
+#define FEATURE_STR_SIZE 64
 
 
 #define NODE_FEATURE_CPU     ( 1UL << 0 )
@@ -22,21 +23,19 @@
 #define NODE_FEATURE_ASIC    ( 1UL << 6 )
 
 
-inline bool _requires_cpu    ( const job_t *j ) { return j->required_features & NODE_FEATURE_CPU; }
-inline bool _requires_cpu_vec( const job_t *j ) { return j->required_features & NODE_FEATURE_CPU_VEC; }
-inline bool _requires_gpu    ( const job_t *j ) { return j->required_features & NODE_FEATURE_GPU; }
-inline bool _requires_npu    ( const job_t *j ) { return j->required_features & NODE_FEATURE_NPU; }
-inline bool _requires_tpu    ( const job_t *j ) { return j->required_features & NODE_FEATURE_TPU; }
-inline bool _requires_fpga   ( const job_t *j ) { return j->required_features & NODE_FEATURE_FPGA; }
-inline bool _requires_asic   ( const job_t *j ) { return j->required_features & NODE_FEATURE_ASIC; }
+inline bool _requires_cpu    ( const feature_mask_t m ) { return m & NODE_FEATURE_CPU; }
+inline bool _requires_cpu_vec( const feature_mask_t m ) { return m & NODE_FEATURE_CPU_VEC; }
+inline bool _requires_gpu    ( const feature_mask_t m ) { return m & NODE_FEATURE_GPU; }
+inline bool _requires_npu    ( const feature_mask_t m ) { return m & NODE_FEATURE_NPU; }
+inline bool _requires_tpu    ( const feature_mask_t m ) { return m & NODE_FEATURE_TPU; }
+inline bool _requires_fpga   ( const feature_mask_t m ) { return m & NODE_FEATURE_FPGA; }
+inline bool _requires_asic   ( const feature_mask_t m ) { return m & NODE_FEATURE_ASIC; }
 
 #define _FEATURES_FMT "%s%s%s%s%s%s%s"
 
 
 typedef struct _node_load_stats_t {
 	float average_cpu_load;
-	size_t average_cpu_load_sc;
-	
 	float memory_load;
 	
 	quantum_t node_stall_time;
@@ -73,6 +72,7 @@ typedef struct _node_t {
 	
 	// функционал узла
 	feature_mask_t features;
+	char feature_str[ FEATURE_STR_SIZE ];
 
 	// нагрузка
 	node_load_stats_t load_stats;
@@ -87,6 +87,9 @@ typedef struct _node_t {
 
 bool cluster_check_node_for_job( __IN__ const job_t  *j,
 								 __IN__ const node_t *n );
+
+void cluster_get_feature_string( __OUT__       char           str[ FEATURE_STR_SIZE ],
+								 __IN__  const feature_mask_t mask );
 
 void cluster_print_node_status( __IN__ const node_t *n );
 

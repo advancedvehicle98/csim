@@ -14,6 +14,9 @@ cluster_remove_job_from_node( __STATE__ job_list_t *jlist )
 	
 	if ( ! jlist->prev_on_node ) {
 		node->jobs = jlist->next_on_node;
+		
+		if ( node->jobs ) node->jobs->prev_on_node = NULL;
+		
 		goto _remove_job_from_node_fin;
 	}
 	

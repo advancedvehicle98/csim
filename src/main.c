@@ -74,6 +74,7 @@ get_schedule_functions( scheduler_t *s, const char *type )
 		s->init       = init_fifo;
 		s->distribute = distribute_fifo;
 		s->destroy    = destroy_fifo;
+		s->print      = print_fifo;
 		
 		return EXIT_SUCCESS;
 	}
@@ -85,6 +86,5 @@ get_schedule_functions( scheduler_t *s, const char *type )
 void
 print_available_schedule_types( void )
 {
-	puts( "\n\tРежимы планирования:"
-		  "\n\t\tfifo : обыный FIFO");
+	puts( ALGORITHMS_HELP );
 }

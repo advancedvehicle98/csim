@@ -2,10 +2,12 @@
 #define __CLUSTER_STATISTICS_H
 
 
+#include <cluster/defs.h>
 #include <cluster/timing.h>
 
 #include <stddef.h>
 #include <stdint.h>
+#include <time.h>
 
 
 // sc - это sample count
@@ -29,10 +31,15 @@ typedef struct __statistics_t {
 	size_t average_memory_load_sc;
 
 	quantum_t total_active_time_quantum;
+	time_t total_active_time_sec;
+	long total_active_time_nsec;
 	
 	size_t jobs_done;     // кол-во выполненных задач (неважно с ошибкой или без)
 	size_t jobs_complete; // кол-во _успешно_ завершённых задач
 } statistics_t;
+
+
+void cluster_print_statistics( __IN__ const statistics_t *s );
 
 
 #endif // ! __CLUSTER_STATISTICS_H
