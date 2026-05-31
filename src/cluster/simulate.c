@@ -2,6 +2,7 @@
 
 #include <stdlib.h>
 #include <time.h>
+#include <unistd.h>
 
 
 static void _finalize_statistics( __STATE__       cluster_t       *c,
@@ -27,9 +28,13 @@ cluster_simulate( __STATE__ cluster_t *c )
 	clock_gettime( CLOCK_REALTIME, &ts_start );
 	
 	while ( c->statistics.jobs_done < c->job_count ) {
-		_DEBUG_PRINTF( "\n\n===========================================================================\n"
-					       "-------------------------( Время: %d " _TQ " )---------------------------------\n"
-					       "===========================================================================\n", t );
+#ifdef CONFIG_OUTPUT_FRAME_BY_FRAME
+		puts( "\033[H\033[J" );
+#endif
+		
+		_DEBUG_PRINTF( "===========================================================================\n"
+				 "      -------------------------( Время: %d " _TQ " )---------------------------------\n"
+				 "      ===========================================================================\n", t );
 
 		// для динамической планировки
 		if ( jseq && t == jseq->moment.time ) {
@@ -55,7 +60,20 @@ cluster_simulate( __STATE__ cluster_t *c )
 		for ( int n = 0; n < node_count; ++n )
 			cluster_print_node_status( node_registry[ n ] );
 
-		// ВРЕМЯ ОБНОВЛЯЕТСЯ ТОЛЬКО ТУТ
+#ifdef CONFIG_OUTPUT_MANUAL
+		getc( stdin );
+		
+#elifdef CONFIG_OUTPUT_AUTO
+
+#   ifndef CONFIG_OUTPUT_AUTO_PAUSE_TIME_US
+#       define CONFIG_OUTPUT_AUTO_PAUSE_TIME_US 10000
+#   endif
+
+		usleep( CONFIG_OUTPUT_AUTO_PAUSE_TIME_US );
+		
+#endif
+		
+		// ВРЕМЯ ОБНОВЛЯЕТСЯ ТОЛЬКО В САМОМ КОНЦЕ
 		++t;
 	}
 
@@ -89,10 +107,11 @@ _finalize_statistics( __STATE__       cluster_t       *c,
 		job_list_t *jlist = jseq->moment.job_list_head;
 		
 		for ( ; jlist; jlist = jlist->_next ) 
-			average_wait_time += jlist->job.wait_time;
+			average_wait_time += (float) jlist->job.wait_time;
 	}
 
-	average_wait_time /= c->job_count;
+	average_wait_time /= (float) c->job_count;
+	c->statistics.average_wait_time = average_wait_time;
 
 	c->statistics.total_active_time_sec  = dts->tv_sec;
 	c->statistics.total_active_time_nsec = dts->tv_nsec;
