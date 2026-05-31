@@ -5,9 +5,9 @@
 #include <stdlib.h>
 
 
-static node_t *_pick_node( __IN__ const job_t   *j,
-						   __IN__       node_t* *nodes,
-						   __IN__ const size_t   n_count );
+static __INLINE node_t *_pick_node( __IN__ const job_t   *j,
+									__IN__       node_t* *nodes,
+									__IN__ const size_t   n_count );
 
 
 void

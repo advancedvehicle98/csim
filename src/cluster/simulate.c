@@ -5,9 +5,9 @@
 #include <unistd.h>
 
 
-static void _finalize_statistics( __STATE__       cluster_t       *c,
-								  __IN__    const quantum_t        t,
-								  __IN__    const struct timespec *dts );
+static __INLINE void _finalize_statistics( __STATE__       cluster_t       *c,
+										   __IN__    const quantum_t        t,
+										   __IN__    const struct timespec *dts );
 
 
 uint32_t

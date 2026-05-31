@@ -5,7 +5,7 @@
 #include <stdlib.h>
 
 
-static quantum_t _evaluate_time_before_start( const node_t *n );
+static __INLINE quantum_t _evaluate_time_before_start( const node_t *n );
 
 
 // предполагается, что задачу действительно

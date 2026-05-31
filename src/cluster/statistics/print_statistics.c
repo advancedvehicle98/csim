@@ -4,7 +4,7 @@
 void
 cluster_print_statistics( __IN__ const statistics_t *s )
 {
-	_DEBUG_PRINTF( "  Общее время                  : %lld.%09ld с. (%u сим. " _TQ ")"
+	_DEBUG_PRINTF( "  Общее время                  : %llu.%09lu с. (%u сим. " _TQ ")"
 		   "\n        Среднее время простоя узлов  : %f сим. " _TQ
 		   "\n        Среднее время ожидания       : %f сим. " _TQ
 		   "\n        Средняя нагрузка на ядра     : %f%%"

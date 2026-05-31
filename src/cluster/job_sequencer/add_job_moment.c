@@ -6,16 +6,16 @@
 static void _add_job_to_moment( __OUT__       job_moment_list_t *jseq,
 								__IN__  const job_t             *j );
 
-static job_moment_list_t *_get_less_equal_moment( __IN__       job_moment_list_t *jseq,
- 												  __IN__ const quantum_t          m );
+static __PURE __INLINE job_moment_list_t *_get_less_equal_moment( __IN__       job_moment_list_t *jseq,
+														   __IN__ const quantum_t          m );
   
-static void _insert_moment_after_moment( __OUT__       job_moment_list_t *jseq,
-										 __IN__  const job_t             *j,
-										 __IN__  const quantum_t          m );
+static __INLINE void _insert_moment_after_moment( __OUT__       job_moment_list_t *jseq,
+												  __IN__  const job_t             *j,
+												  __IN__  const quantum_t          m );
 
-static void _job_sequence_init( __OUT__         job_moment_list_t* *jseq,
-								__IN__    const job_t              *j,
-								__IN__    const quantum_t           m );
+static __INLINE void _job_sequence_init( __OUT__         job_moment_list_t* *jseq,
+										 __IN__    const job_t              *j,
+										 __IN__    const quantum_t           m );
 
 
 void

@@ -37,7 +37,12 @@ OBJ_IN_BUILD_DIR = $(foreach O,$(OBJ),$(BUILD_DIR)/$(O))
 COMPONENTS = interconnect internal job job_sequencer node statistics
 
 
-all: build_dir link
+all: build_dir link build/job_dataset_generator
+
+
+build/job_dataset_generator:
+	gcc $(CFLAGS) -c job_dataset_generator/main.c -o job_dataset_generator/main.o
+	gcc $(LDFLAGS) job_dataset_generator/main.o -o build/job_dataset_generator
 
 
 build_dir:

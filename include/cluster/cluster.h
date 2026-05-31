@@ -29,26 +29,26 @@ typedef struct _cluster_t {
 } cluster_t;
 
 
-uint32_t cluster_init( __STATE__       cluster_t   *c,
-					   __IN__    const char        *cf,
-					   __IN__    const char        *jf,
-					   __IN__          scheduler_t *s );
+__COLD uint32_t cluster_init( __STATE__       cluster_t   *c,
+							  __IN__    const char        *cf,
+							  __IN__    const char        *jf,
+							  __IN__          scheduler_t *s );
 
-void cluster_destroy( __STATE__ cluster_t *c );
+__COLD void cluster_destroy( __STATE__ cluster_t *c );
 
 uint32_t cluster_simulate( __STATE__ cluster_t *c );
 
-uint32_t cluster_simulation_step( __STATE__ cluster_t *c, __IN__ const quantum_t t );
+__HOT uint32_t cluster_simulation_step( __STATE__ cluster_t *c, __IN__ const quantum_t t );
 
 // тематически эта функция подходит к разделу interconnect
 // но чтобы не было возни с заголовками пока лежит тут
-uint32_t cluster_node_network_from_dataset( __STATE__       cluster_t *c,
-											__IN__    const char      *f );
+__COLD uint32_t cluster_node_network_from_dataset( __STATE__       cluster_t *c,
+												   __IN__    const char      *f );
 
-void cluster_node_network_from_dataset_start( __OUT__         uint32_t  *s,
-											  __OUT__         pthread_t *p,
-											  __STATE__       cluster_t *c,
-											  __IN__    const char      *f );
+__COLD void cluster_node_network_from_dataset_start( __OUT__         uint32_t  *s,
+													 __OUT__         pthread_t *p,
+													 __STATE__       cluster_t *c,
+													 __IN__    const char      *f );
 
 
 #endif // ! __CLUSTER_H

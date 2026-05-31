@@ -1,8 +1,8 @@
 #include <cluster/node.h>
 
 
-static void _free_node_resources( __STATE__       node_t *n,
-								  __IN__    const job_t  *j );
+static __INLINE void _free_node_resources( __STATE__       node_t *n,
+										   __IN__    const job_t  *j );
 
 
 void

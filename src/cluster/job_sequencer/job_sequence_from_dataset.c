@@ -8,7 +8,7 @@
 #include <string.h>
 
 
-static uint32_t _parse_lines( __STATE__ cluster_t  *c, __IN__ FILE *f );
+static __INLINE uint32_t _parse_lines( __STATE__ cluster_t  *c, __IN__ FILE *f );
 
 
 uint32_t

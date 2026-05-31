@@ -7,9 +7,9 @@
 #include <schedule_algorithms.h>
 
 
-uint32_t check_args( const int argc, const char *argv[] );
-uint32_t get_schedule_functions( scheduler_t *s, const char *type );
-void print_available_schedule_types( void );
+static uint32_t check_args( const int argc, const char *argv[] );
+static uint32_t get_schedule_functions( scheduler_t *s, const char *type );
+static void print_available_schedule_types( void );
 
 
 uint32_t

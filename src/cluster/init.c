@@ -5,9 +5,9 @@
 #include <time.h>
 
 
-static void _populate_node_registry( __STATE__ cluster_t *c );
+static __INLINE void _populate_node_registry( __STATE__ cluster_t *c );
 
-static void _reset_statistics( __OUT__ statistics_t *s );
+static __INLINE void _reset_statistics( __OUT__ statistics_t *s );
 
 
 uint32_t

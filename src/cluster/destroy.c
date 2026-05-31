@@ -3,13 +3,13 @@
 #include <stdlib.h>
 
 
-static void _destroy_bus( __STATE__ bus_connection_t* bus );
-static void _destroy_connection( __STATE__ interconnect_t *con );
-static void _destroy_connections( __STATE__ interconnect_list_t *cons );
-static void _destroy_job_list( __STATE__ job_list_t *jlist );
-static void _destroy_job_sequence( __STATE__ job_moment_list_t *jseq );
-static void _destroy_node( __STATE__ node_t* n );
-static void _destroy_scheduler( __STATE__ scheduler_t *s );
+static __INLINE void _destroy_bus( __STATE__ bus_connection_t* bus );
+static __INLINE void _destroy_connection( __STATE__ interconnect_t *con );
+static __INLINE void _destroy_connections( __STATE__ interconnect_list_t *cons );
+static __INLINE void _destroy_job_list( __STATE__ job_list_t *jlist );
+static __INLINE void _destroy_job_sequence( __STATE__ job_moment_list_t *jseq );
+static __INLINE void _destroy_node( __STATE__ node_t* n );
+static __INLINE void _destroy_scheduler( __STATE__ scheduler_t *s );
 
 
 void

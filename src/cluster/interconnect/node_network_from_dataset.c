@@ -8,16 +8,16 @@
 
 static interconnect_list_t *_add_interconnect_to_list( __STATE__ cluster_t *c );
 
-static interconnect_type_t _fetch_type( __STATE__ char* *l );
+static __INLINE interconnect_type_t _fetch_type( __STATE__ char* *l );
 
-static uint32_t _parse_lines( __STATE__ cluster_t *c, __IN__ FILE *f );
+static __INLINE uint32_t _parse_lines( __STATE__ cluster_t *c, __IN__ FILE *f );
 
-static size_t _parse_bus( __OUT__ interconnect_list_t *ilist,
+static __INLINE size_t _parse_bus( __OUT__ interconnect_list_t *ilist,
 						  __IN__  FILE                *f,
 						  __IN__  char                *l,
 						  __IN__  char                *l_off );
 
-static void _reset_load_stats( __STATE__ node_t *n );
+static __INLINE void _reset_load_stats( __STATE__ node_t *n );
 
 
 uint32_t

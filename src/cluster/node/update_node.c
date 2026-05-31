@@ -1,16 +1,16 @@
 #include <cluster/node.h>
 
 
-static bool _is_node_free( __IN__ const node_t *n );
+static __INLINE __PURE bool _is_node_free( __IN__ const node_t *n );
 
-static void _update_average_cpu_load( __STATE__ node_t       *n,
-									  __STATE__ statistics_t *s );
+static __INLINE void _update_average_cpu_load( __STATE__ node_t       *n,
+											   __STATE__ statistics_t *s );
 
-static void _update_average_memory_load( __STATE__ node_t       *n,
-										 __STATE__ statistics_t *s );
+static __INLINE void _update_average_memory_load( __STATE__ node_t       *n,
+												  __STATE__ statistics_t *s );
 
-static void _update_average_stall_time( __STATE__ node_t       *n,
-										__STATE__ statistics_t *s );
+static __INLINE void _update_average_stall_time( __STATE__ node_t       *n,
+												 __STATE__ statistics_t *s );
 
 
 void
@@ -26,7 +26,7 @@ cluster_update_node( __STATE__ node_t       *n,
 }
 
 
-bool
+ bool
 _is_node_free( __IN__ const node_t *n )
 {
 	return n->occupation.mem == n->mem_size;
