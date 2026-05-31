@@ -44,7 +44,7 @@ cluster_simulate( __STATE__ cluster_t *c )
 
 		s->schedule( s, node_registry, node_count );
 
-		cluster_simulation_step( c, t++ );
+		cluster_simulation_step( c, t );
 
 		if ( s->print ) s->print( s );
 
@@ -54,6 +54,9 @@ cluster_simulate( __STATE__ cluster_t *c )
 		
 		for ( int n = 0; n < node_count; ++n )
 			cluster_print_node_status( node_registry[ n ] );
+
+		// ВРЕМЯ ОБНОВЛЯЕТСЯ ТОЛЬКО ТУТ
+		++t;
 	}
 
 	clock_gettime( CLOCK_REALTIME, &ts_end );

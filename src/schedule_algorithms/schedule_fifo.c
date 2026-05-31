@@ -16,8 +16,11 @@ schedule_fifo( __STATE__ scheduler_t *s,
 			   __IN__    size_t       n_count )
 {
 	fifo_queue_t *q = (fifo_queue_t *) s->state;
-	job_list_t *c = q->c;
 
+	if ( ! q ) return;
+	
+	job_list_t *c = q->c;
+	
 	// пропускаем задачи, которые уже назначены
 	while ( c && c->job.assigned_node ) c = c->next;
 
@@ -104,6 +107,8 @@ void
 print_fifo( __IN__ scheduler_t *s )
 {
 	fifo_queue_t *q = (fifo_queue_t *) s->state;
+
+	if ( ! q ) return;
 
 	job_list_t *c = q->c;
 

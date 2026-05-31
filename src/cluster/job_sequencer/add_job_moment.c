@@ -27,16 +27,14 @@ cluster_add_job_moment( __STATE__       cluster_t *c,
 
 	if ( ! jseq ) {
 		_job_sequence_init( &jseq, j, m );
-		goto _finish_add;
+		c->job_sequence = jseq;
+		return;
 	}
 
 	jseq = _get_less_equal_moment( jseq, m );
 
 	if ( jseq->moment.time == m ) _add_job_to_moment( jseq, j );
 	else                          _insert_moment_after_moment( jseq, j, m );
-		
-_finish_add:
-	c->job_sequence = jseq;
 }
 
 

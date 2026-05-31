@@ -8,7 +8,7 @@
 void
 cluster_print_job( __IN__ const job_t *j )
 {
-	const char feature_string[ FEATURE_STR_SIZE ];
+	char feature_string[ FEATURE_STR_SIZE ];
 
 	cluster_get_feature_string( feature_string, j->required_features );
 	

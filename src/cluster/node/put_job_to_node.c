@@ -64,10 +64,7 @@ cluster_put_job_to_node( __STATE__ job_list_t *jlist,
 
 	job_list_t *t = n->jobs, *next = t->next_on_node;
 
-	// подобный фикс таже имеет место в print_node_status
-	// в связи с чем в next_on_node дублируется текущий указатель
-	// пока непонятно
-	for ( ; next && t != next; t = next, next = next->next_on_node );
+	for ( ; next; t = next, next = next->next_on_node );
 
 	t->next_on_node = jlist;
 	jlist->prev_on_node = t;
