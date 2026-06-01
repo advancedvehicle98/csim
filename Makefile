@@ -32,6 +32,12 @@ CFLAGS = \
 	-I $(INC_DIR)
 LDFLAGS = -lpthread
 
+ifeq ($(AUTO_SIM), 1)
+	CFLAGS += -DCONFIG_OUTPUT_AUTO -DCONFIG_OUTPUT_SEQUENTIAL
+else
+	CFLAGS += -DCONFIG_OUTPUT_FRAME_BY_FRAME -DCONFIG_OUTPUT_MANUAL
+endif
+
 OBJ_IN_BUILD_DIR = $(foreach O,$(OBJ),$(BUILD_DIR)/$(O))
 
 COMPONENTS = interconnect internal job job_sequencer node statistics

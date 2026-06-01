@@ -43,6 +43,10 @@ uint32_t    p_max_prio         = 0;
 
 uint64_t    p_allowed_features = 1;
 
+bool        p_feature_not_rand = false;
+
+bool        p_to_stdout        = false;
+
 
 static size_t interpret( const char *opt, const char *tail[], const size_t tail_len );
 static uint32_t parse_args( const size_t argc, const char *argv[] );
@@ -60,7 +64,9 @@ main( const unsigned  argc,
 
 	FILE *f;
 
-	if ( ! p_rewrite )
+	if ( p_to_stdout )
+		f = stdout;
+	else if ( ! p_rewrite )
 		f = fopen( p_out_file_name, "wx" );
 	else
 		f = fopen( p_out_file_name, "w" );
@@ -86,7 +92,9 @@ main( const unsigned  argc,
 				 rand() % ( p_max_cpu - p_min_cpu ) + p_min_cpu,
 				 rand() % ( p_max_thread - p_min_thread ) + p_min_thread,
 				 rand() % ( p_min_prio - p_max_prio ) + p_max_prio,
-				 rand() & p_allowed_features | NODE_FEATURE_CPU );
+				 ( p_feature_not_rand
+				   ? p_allowed_features
+				   : rand() & p_allowed_features | NODE_FEATURE_CPU) );
 	}
 
 	fclose( f );
@@ -217,6 +225,16 @@ interpret( const char   *opt,
 		p_allowed_features |= NODE_FEATURE_ASIC;
 		return 1;
 	}
+
+	if ( STR_EQUAL( opt, "--fnot-rand" ) ) {
+		p_feature_not_rand = true;
+		return 1;
+	}
+
+	if ( STR_EQUAL( opt, "--stdout" ) ) {
+		p_to_stdout = true;
+		return 1;
+	}
 	
 	return 0;
 }
@@ -245,7 +263,7 @@ print_help( void )
 {
 	puts( "job_dataset_generator <ключи>"
 		  "\n\nключи:"
-		  "\n\t-c <n>         кол-во задач (если не указано, генерируется случайным образом)"
+		  "\n\t-c <n>                      кол-во задач"
 		  "\n\t-o <файл>                   файл для вывода (по умолчанию jobs)"
 		  "\n\t-r                          перезапись файла"
 		  "\n\t-t <t>                      конечный момент времени для появления задач"
@@ -256,11 +274,13 @@ print_help( void )
 		  "\n\t--cpu <min-c> <max-c>       границы кол-ва процессоров"
 		  "\n\t--thread <min-t> <max-t>    границы кол-ва потоков (ядер)"
 		  "\n\t--priority <min-p> <max-p>  границы приоритетов"
+		  "\n\t--fnot-rand                 функции, указываемые через флаги, появляются во всех задачах"
+		  "\n\t--stdout                    вывод в консоль, вместо файла (игнорируется -o)"
 		  "\n\n\tФлаги функций: "
-		  "\n\t\t--fcpu-vec CPU_VEC"
-		  "\n\t\t--fgpu     GPU"
-		  "\n\t\t--fnpu     NPU"
-		  "\n\t\t--ftpu     TPU"
-		  "\n\t\t--ffpga    FPGA"
+		  "\n\t\t--fcpu-vec CPU_VEC (векторные инструкции)"
+		  "\n\t\t--fgpu     GPU (видеокарта)"
+		  "\n\t\t--fnpu     NPU (нейронный процессор)"
+		  "\n\t\t--ftpu     TPU (тензорный процессор)"
+		  "\n\t\t--ffpga    FPGA (ПЛИС)"
 		  "\n\t\t--fasic    ASIC");
 }
