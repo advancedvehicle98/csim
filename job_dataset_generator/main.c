@@ -64,13 +64,10 @@ main( const unsigned  argc,
 
 	FILE *f;
 
-	if ( p_to_stdout )
-		f = stdout;
-	else if ( ! p_rewrite )
-		f = fopen( p_out_file_name, "wx" );
-	else
-		f = fopen( p_out_file_name, "w" );
-
+	f = p_to_stdout ? stdout
+	  : ! p_rewrite ? fopen( p_out_file_name, "wx" )
+	  :               fopen( p_out_file_name, "w" );
+	
 	if ( ! f ) {
 		printf( "%s уже существует\n", p_out_file_name );
 		return EXIT_FAILURE;

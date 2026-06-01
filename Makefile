@@ -8,6 +8,7 @@ OBJ = main.o \
 	cluster/internal/parse_file_wrapper.o \
 	cluster/interconnect/node_network_from_dataset.o \
 	cluster/job/copy_job.o \
+	cluster/job/fit_job.o \
 	cluster/job/print_job.o \
 	cluster/job/print_job_list.o \
 	cluster/job/print_job_truncated.o \
@@ -47,8 +48,8 @@ all: build_dir link build/job_dataset_generator
 
 
 build/job_dataset_generator:
-	gcc $(CFLAGS) -c job_dataset_generator/main.c -o job_dataset_generator/main.o
-	gcc $(LDFLAGS) job_dataset_generator/main.o -o build/job_dataset_generator
+	gcc $(CFLAGS) -c job_dataset_generator/main.c -o build/job_dataset_generator.o
+	gcc $(LDFLAGS) build/job_dataset_generator.o -o build/job_dataset_generator
 
 
 build_dir:

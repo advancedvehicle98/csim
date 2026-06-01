@@ -33,10 +33,11 @@ schedule_fifo( __STATE__ scheduler_t *s,
 		// вдруг попалось среди неготовых задач
 		if ( j->is_done ) goto _schedule_fifo_continue;
 
+		cluster_fit_job( j, 1 );
+
 		node_t *n = _pick_node( j, nodes, n_count );
 
 		if ( ! n ) goto _schedule_fifo_continue;
-
 		cluster_put_job_to_node( c, n );
 
 _schedule_fifo_continue:

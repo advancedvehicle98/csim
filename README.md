@@ -48,5 +48,3 @@
 ```bash
 ./build/job_dataset_generator -c 20 -t 20 -r --cpu 1 2 --thread 2 4 --wait-time 40 60 --stdout | sort -n -o build/many_jobs
 ```
-
-sort

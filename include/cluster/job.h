@@ -68,6 +68,9 @@ typedef struct __job_list_t {
 
 void cluster_copy_job( __OUT__ job_t *dest, __IN__ const job_t *src );
 
+void cluster_fit_job( __STATE__       job_t  *j,
+					  __IN__    const size_t  t );
+	
 void cluster_print_job( __IN__ const job_t* j );
 
 void cluster_print_job_list( __IN__ const job_list_t *jlist );

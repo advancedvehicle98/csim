@@ -8,6 +8,16 @@ void
 cluster_print_job_truncated( __IN__ const job_t *j )
 {
 	if ( ! j->assigned_node ) {
+		// вдруг у нас планировщик работает с вытеснением задач
+		if ( j->exec_time ) { 
+			_DEBUG_PRINTF( "    %s : ожидание: %u/%u " _TQ " | %u/%u " _TQ " | %u потоков | %u " _MQ " памяти | приоритет: %u",
+						   j->name, j->wait_time, j->max_wait_time,
+						   j->exec_time, j->estimated_time,
+						   j->cpu_count ? j->cpu_count * j->thread_count : j->thread_count,
+						   j->mem_size, j->priority );
+			return;
+		}
+		
 		_DEBUG_PRINTF( "    %s : ожидание: %u/%u " _TQ " | %u " _TQ " | %u потоков | %u " _MQ " памяти | приоритет: %u",
 					   j->name, j->wait_time, j->max_wait_time,
 					   j->estimated_time,
@@ -17,11 +27,13 @@ cluster_print_job_truncated( __IN__ const job_t *j )
 	}
 	
 	if ( j->time_before_start ) {
-		_DEBUG_PRINTF( "    %s : время до начала: %u " _TQ, j->name, j->time_before_start );
+		_DEBUG_PRINTF( "    %s : время до начала: %u " _TQ " | ожидание: %u/%u " _TQ,
+					   j->name, j->time_before_start,
+					   j->wait_time, j->max_wait_time );
 		return;
 	}
 	
-	_DEBUG_PRINTF( "    %s : %u " _TQ " / %u " _TQ " | %u потоков | %u " _MQ " памяти | приоритет: %u",
+	_DEBUG_PRINTF( "    %s : %u/%u " _TQ " | %u потоков | %u " _MQ " памяти | приоритет: %u",
 				   j->name, j->exec_time, j->estimated_time,
 				   j->cpu_count ? j->cpu_count * j->thread_count : j->thread_count,
 				   j->mem_size, j->priority );

@@ -34,7 +34,7 @@ cluster_put_job_to_node( __STATE__ job_list_t *jlist,
 
 			if ( thread_count <= cpu_threads ) {
 				n->occupation.cpu_threads[ c ] -= thread_count;
-				return;
+				break;
 			}
 
 			n->occupation.cpu_threads[ c ] = 0;
