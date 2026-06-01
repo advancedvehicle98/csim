@@ -79,6 +79,16 @@ get_schedule_functions( scheduler_t *s, const char *type )
 		return EXIT_SUCCESS;
 	}
 	
+	if ( _STR_EQUAL( type, "priority" ) ) {
+		s->schedule   = schedule_priority;
+		s->init       = init_priority;
+		s->distribute = distribute_priority;
+		s->destroy    = destroy_priority;
+		s->print      = print_priority;
+		
+		return EXIT_SUCCESS;
+	}
+	
 	return EXIT_FAILURE;
 }
 

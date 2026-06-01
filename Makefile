@@ -22,7 +22,8 @@ OBJ = main.o \
 	cluster/node/remove_job_from_node.o \
 	cluster/node/update_node.o \
 	cluster/statistics/print_statistics.o \
-	schedule_algorithms/schedule_fifo.o
+	schedule_algorithms/schedule_fifo.o \
+	schedule_algorithms/schedule_priority.o
 
 BUILD_DIR = ./build
 SRC_DIR   = ./src

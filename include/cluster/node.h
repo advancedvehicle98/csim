@@ -68,6 +68,10 @@ typedef struct _node_t {
 	size_t cpu_count;
 	size_t thread_count;
 
+	// возможно потом можно сделать какое-то замедление.
+	// единственном видом замедления на данный момент
+	// является замедление задачи через сокращение кол-ва потоков
+	// вызовом cluster_fit_job().
 	float max_exec_rate, exec_rate;
 	
 	// функционал узла
@@ -85,8 +89,18 @@ typedef struct _node_t {
 } node_t;
 
 
+// для планировщиков
+typedef struct _node_list_t {
+	node_t              *node;
+	struct _node_list_t *next;
+} node_list_t;
+
+
 bool cluster_check_node_for_job( __IN__ const job_t  *j,
 								 __IN__ const node_t *n );
+
+bool cluster_check_node_for_job_as_if_empty( __IN__ const job_t  *j,
+											 __IN__ const node_t *n );
 
 void cluster_get_feature_string( __OUT__       char           str[ FEATURE_STR_SIZE ],
 								 __IN__  const feature_mask_t mask );

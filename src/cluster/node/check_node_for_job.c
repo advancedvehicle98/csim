@@ -43,3 +43,22 @@ cluster_check_node_for_job( __IN__ const job_t  *j,
 	
 	return has_features && has_enough_memory && has_available_threads;
 }
+
+
+// функция для оценок при планировании
+bool
+cluster_check_node_for_job_as_if_empty( __IN__ const job_t  *j,
+										__IN__ const node_t *n )
+{
+	bool has_features = ( j->required_features & n->features ) == j->required_features;
+
+	bool has_enough_memory = j->mem_size <= n->mem_size;
+
+	size_t required_thread_count = j->cpu_count
+		                         ? j->thread_count * j->cpu_count
+		                         : j->thread_count;
+
+	bool has_available_threads = required_thread_count <= n->cpu_count*n->thread_count;
+	
+	return has_features && has_enough_memory && has_available_threads;
+}

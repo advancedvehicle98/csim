@@ -60,10 +60,10 @@ _destroy_connections( __STATE__ interconnect_list_t *cons )
 void
 _destroy_job_list( __STATE__ job_list_t *jlist )
 {
-	job_list_t *next = jlist->_next;
+	job_list_t *next = jlist->next;
 
-	for ( ; next; jlist = next, next = jlist->_next ) free( jlist );
-	
+	for ( ; next; jlist = next, next = jlist->next ) free( jlist );\
+
 	free( jlist );
 }
 

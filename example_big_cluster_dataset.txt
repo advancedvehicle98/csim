@@ -1,0 +1,19 @@
+bus 2 6 8
+node_fast_0 2 0 16000 1 32 3 7
+node_fast_1 2 0 16000 1 32 3 7
+node_fast_2 2 0 16000 1 32 3 7
+node_fast_3 2 0 16000 1 32 3 7
+node_fast_4 2 0 16000 1 32 3 7
+node_fast_5 2 0 16000 1 32 3 7
+node_fast_6 2 0 16000 1 32 3 7
+node_fast_7 2 0 16000 1 32 3 7
+bus 6 10 4
+node_mem_0 1 0 64000 2 64 2 7
+node_mem_1 1 0 64000 2 64 2 7
+node_mem_2 1 0 64000 2 64 2 7
+node_mem_3 1 0 64000 2 64 2 7
+bus 4 10 4
+node_npu_0 4 0 64000 2 64 1 31
+node_npu_1 4 0 64000 2 64 1 31
+node_npu_2 4 0 64000 2 64 1 31
+node_npu_3 4 0 64000 2 64 1 31

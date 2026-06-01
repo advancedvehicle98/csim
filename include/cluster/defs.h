@@ -78,6 +78,7 @@ typedef uint64_t feature_mask_t;
 #define __INLINE __attribute__(( always_inline )) inline
 #define __HOT    __attribute__(( hot ))
 #define __PURE   __attribute__(( pure ))
+#define __UNUSED __attribute__(( unused ))
 
 
 #endif // __CLUSTER_DEFS_H

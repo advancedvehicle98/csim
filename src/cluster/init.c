@@ -26,9 +26,6 @@ cluster_init( __STATE__       cluster_t   *c,
 	
 	uint32_t status;
 
-	s->init( s );
-	c->scheduler = s;
-
 	status = cluster_job_sequence_from_dataset( c, jf );
 	
 	if ( _IS_ERROR( status ) ) {
@@ -46,6 +43,9 @@ cluster_init( __STATE__       cluster_t   *c,
 	_populate_node_registry( c );
 	
 	_reset_statistics( &( c->statistics ) );
+
+	s->init( s, c->node_registry, c->node_count );
+	c->scheduler = s;
 
 	_DEBUG_PUTS( "Кластер инициализирован" );
 

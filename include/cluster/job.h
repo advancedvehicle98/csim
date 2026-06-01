@@ -57,13 +57,24 @@ typedef struct __job_list_t {
 	// и для планировщика, т.к. не охота чтобы именно планировщик
 	// рулил последовательностью задач и изменял её, мешая симулятору
 	// обновлять прогресс у задач
-	struct __job_list_t *_next;  // для симулятора
 	struct __job_list_t *next;   // для планировщика
 	struct __job_list_t *next_on_node; // для узла (для логов по крайней мере)
 	struct __job_list_t *prev_on_node; // да задолбали меня эти указатели
+
+	// эт короче симулятор сам может определять, сколько указателей
+	// потребуется для задачи
+	// если планировщик намусорит, то он обязан за собой убрать
+	void *sched_info;
 	
-	job_t                job;
+	job_t job;
 } job_list_t;
+
+
+inline quantum_t
+get_time_left( job_t *j )
+{
+	return j->wait_time + j->estimated_time - j->exec_time;
+}
 
 
 void cluster_copy_job( __OUT__ job_t *dest, __IN__ const job_t *src );

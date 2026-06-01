@@ -4,6 +4,7 @@
 
 #define CONFIG_DEBUG
 
+
 // Настройки свойств задач
 
 // использовать ли временные погрешности
@@ -30,6 +31,9 @@
 
 /* #define CONFIG_OUTPUT_AUTO_PAUSE_TIME_US 1000000 */
 #define CONFIG_OUTPUT_AUTO_PAUSE_TIME_US 0
+
+
+#undef CONFIG_PRINT_INCOMLETE_JOBS
 
 
 #endif // ! __CLUSTER_CONFIG_H

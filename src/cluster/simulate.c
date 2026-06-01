@@ -46,7 +46,7 @@ cluster_simulate( __STATE__ cluster_t *c )
 			s->distribute( s, new_jlist );
 			jseq = jseq->next;
 		}
-
+		
 		s->schedule( s, node_registry, node_count );
 
 		cluster_simulation_step( c, t );
@@ -88,6 +88,24 @@ cluster_simulate( __STATE__ cluster_t *c )
 					 "-------------------------( Результат )-------------------------------------\n"
 					 "===========================================================================" );
 	cluster_print_statistics( &( c->statistics ) );
+
+#ifdef CONFIG_PRINT_INCOMLETE_JOBS
+	if ( c->statistics.jobs_done != c->statistics.jobs_complete ) {
+		_DEBUG_PUTS( "\n\n-------------------------------------------------------------------\n"
+					 "                     НЕУСПЕШНО ЗАВЕРШЁННЫЕ ЗАДАЧИ\n"
+					 "-------------------------------------------------------------------" );
+		
+		for ( ; jseq; jseq = jseq->next ) {
+			job_list_t *jlist = jseq->moment.job_list_head;
+			
+			for ( ; jlist; jlist = jlist->next ) {
+				job_t *j = &( jlist->job );
+
+				if ( ! j->is_complete ) cluster_print_job( j );
+			}
+		}
+	}
+#endif
 	
 	return EXIT_SUCCESS;
 }
@@ -106,7 +124,7 @@ _finalize_statistics( __STATE__       cluster_t       *c,
 	for ( ; jseq; jseq = jseq->next ) {
 		job_list_t *jlist = jseq->moment.job_list_head;
 		
-		for ( ; jlist; jlist = jlist->_next ) 
+		for ( ; jlist; jlist = jlist->next ) 
 			average_wait_time += (float) jlist->job.wait_time;
 	}
 

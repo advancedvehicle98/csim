@@ -81,6 +81,8 @@ _evaluate_time_before_start( const node_t *n )
 
 	quantum_t mn = n->ic->delay_min;
 	quantum_t mx = n->ic->delay_max;
+
+	if ( ! mx ) return t;
 		
 	t += ( rand() % ( mx - mn ) ) + mn;
 	

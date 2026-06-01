@@ -22,7 +22,7 @@ schedule_fifo( __STATE__ scheduler_t *s,
 	job_list_t *c = q->c;
 	
 	// пропускаем задачи, которые уже назначены
-	while ( c && c->job.assigned_node ) c = c->next;
+	while ( c && c->job.assigned_node ) c = (job_list_t *) c->sched_info;
 
 	// чтобы в след. раз не проходиться по сделанным задачам
 	q->c = c;
@@ -32,22 +32,22 @@ schedule_fifo( __STATE__ scheduler_t *s,
 
 		// вдруг попалось среди неготовых задач
 		if ( j->is_done ) goto _schedule_fifo_continue;
-
-		cluster_fit_job( j, 1 );
-
+		
 		node_t *n = _pick_node( j, nodes, n_count );
 
 		if ( ! n ) goto _schedule_fifo_continue;
 		cluster_put_job_to_node( c, n );
 
 _schedule_fifo_continue:
-		c = c->next;
+		c = (job_list_t *) c->sched_info;
 	}
 }
 
 
 uint32_t
-init_fifo( __STATE__ scheduler_t *s )
+init_fifo( __STATE__       scheduler_t *s,
+		   __UNUSED        node_t*     *n,
+		   __UNUSED  const size_t       n_count )
 {
 	// грязную работу делает distribute_fifo
 	s->state = NULL;
@@ -72,13 +72,13 @@ distribute_fifo( __STATE__ scheduler_t *s,
 
 	q = (fifo_queue_t *) s->state;
 
-	q->t->next = jlist;
+	q->t->sched_info = (void *) jlist;
 
 	if ( ! q->c ) q->c = jlist;
 
 _distribute_get_tail:
 	job_list_t *t = jlist;
-	for ( ; t->next; t = t->next );
+	for ( ; t->sched_info; t = (job_list_t *) t->sched_info );
 		
 	q->t = t;
 }
@@ -122,7 +122,7 @@ print_fifo( __IN__ scheduler_t *s )
 		return;
 	}
 
-	for ( ; c; c = c->next )
+	for ( ; c; c = (job_list_t *) c->sched_info )
 		if ( ! c->job.assigned_node && ! c->job.is_done )
 			cluster_print_job_truncated( &( c->job ) );
 }
