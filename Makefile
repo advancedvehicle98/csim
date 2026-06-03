@@ -9,6 +9,7 @@ OBJ = main.o \
 	cluster/interconnect/node_network_from_dataset.o \
 	cluster/job/copy_job.o \
 	cluster/job/fit_job.o \
+	cluster/job/get_total_time_for_job.o \
 	cluster/job/print_job.o \
 	cluster/job/print_job_list.o \
 	cluster/job/print_job_truncated.o \
@@ -22,6 +23,7 @@ OBJ = main.o \
 	cluster/node/remove_job_from_node.o \
 	cluster/node/update_node.o \
 	cluster/statistics/print_statistics.o \
+	schedule_algorithms/schedule_backfill.o \
 	schedule_algorithms/schedule_fifo.o \
 	schedule_algorithms/schedule_priority.o
 

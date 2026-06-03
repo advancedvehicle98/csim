@@ -20,7 +20,9 @@ cluster_put_job_to_node( __STATE__ job_list_t *jlist,
 	if ( j->assigned_node ) return;
 	
 	j->assigned_node = n;
-	j->time_before_start = _evaluate_time_before_start( n );
+	// добавляем время, т.к. планировкщик перед этим
+	// мог сам определить, через какое время должна запуститься задача
+	j->time_before_start += _evaluate_time_before_start( n );
 
 	n->occupation.mem -= j->mem_size;
 

@@ -7,8 +7,9 @@
 
 #define ALGORITHMS_HELP \
 	"\n\tРежимы планирования:" \
-	"\n\t\tfifo     : обычный FIFO" \
-	"\n\t\tpriority : вытесняющее с приоритетами"
+	"\n\t\tfifo     : обычный FIFO (FCFS)" \
+	"\n\t\tpriority : вытесняющее с приоритетами с EDF-очередью" \
+	"\n\t\tbackfill : backfill (HRB)"
 
 
 // FIFO ----------------------------------------------------
@@ -40,6 +41,15 @@ __COLD uint32_t init_priority( __STATE__ scheduler_t *s, __IN__ node_t* *n, __IN
 __HOT  void distribute_priority( __STATE__ scheduler_t *s, __STATE__ job_list_t *jlist );
 __COLD void destroy_priority( __STATE__ scheduler_t *s );
 __HOT  void print_priority( __IN__ scheduler_t *s );
+
+
+// Backfill -------------------------------------------
+
+__HOT  void schedule_backfill( __STATE__ scheduler_t *s, __IN__ node_t* *n, __IN__ const size_t n_count );
+__COLD uint32_t init_backfill( __STATE__ scheduler_t *s, __IN__ node_t* *n, __IN__ const size_t n_count );
+__HOT  void distribute_backfill( __STATE__ scheduler_t *s, __STATE__ job_list_t *jlist );
+__COLD void destroy_backfill( __STATE__ scheduler_t *s );
+__HOT  void print_backfill( __IN__ scheduler_t *s );
 
 
 #endif // ! __SCHEDULE_ALGORITHMS

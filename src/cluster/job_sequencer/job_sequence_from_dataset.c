@@ -37,6 +37,7 @@ typedef enum {
 	_JOB_TERM_COUNT_PER_LINE
 } _job_term_t;
 
+
 uint32_t
 _parse_lines( __STATE__ cluster_t  *c,
 			  __IN__    FILE       *f )

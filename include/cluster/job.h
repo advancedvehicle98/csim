@@ -81,6 +81,9 @@ void cluster_copy_job( __OUT__ job_t *dest, __IN__ const job_t *src );
 
 void cluster_fit_job( __STATE__       job_t  *j,
 					  __IN__    const size_t  t );
+
+quantum_t cluster_get_total_time_for_job( __IN__ const job_t  *j,
+										  __IN__ const node_t *n );
 	
 void cluster_print_job( __IN__ const job_t* j );
 

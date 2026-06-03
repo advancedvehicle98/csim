@@ -28,9 +28,7 @@ main( const int   argc,
 	
 	scheduler_t s;
 
-	get_schedule_functions( &s, st );
-
-	if ( ! s.schedule ) {
+	if ( get_schedule_functions( &s, st ) == EXIT_FAILURE ) {
 		_ERROR_PUTS( "Некорректный тип планировщика" );
 		print_available_schedule_types();
 		return EXIT_FAILURE;
@@ -85,6 +83,16 @@ get_schedule_functions( scheduler_t *s, const char *type )
 		s->distribute = distribute_priority;
 		s->destroy    = destroy_priority;
 		s->print      = print_priority;
+		
+		return EXIT_SUCCESS;
+	}
+	
+	if ( _STR_EQUAL( type, "backfill" ) ) {
+		s->schedule   = schedule_backfill;
+		s->init       = init_backfill;
+		s->distribute = distribute_backfill;
+		s->destroy    = destroy_backfill;
+		s->print      = print_backfill;
 		
 		return EXIT_SUCCESS;
 	}

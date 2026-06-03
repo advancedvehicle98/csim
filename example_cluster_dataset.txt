@@ -3,6 +3,3 @@ node_fast_0 2 0 16000 1 32 3 7
 node_fast_1 2 0 16000 1 32 3 7
 node_fast_2 2 0 16000 1 32 3 7
 node_fast_3 2 0 16000 1 32 3 7
-bus 6 10 2
-node_npu_0 1 0 64000 2 64 1 31
-node_npu_1 1 0 64000 2 64 1 31

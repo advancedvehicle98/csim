@@ -2,6 +2,8 @@
 
 #include <stdlib.h>
 
+// получилась смесь приоритетного планирования с EDF c вытеснением
+
 
 static __PURE quantum_t _get_max_response_time( __IN__ const node_t *n );
 

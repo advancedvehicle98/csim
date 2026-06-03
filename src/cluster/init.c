@@ -30,21 +30,25 @@ cluster_init( __STATE__       cluster_t   *c,
 	
 	if ( _IS_ERROR( status ) ) {
 		_ERROR_PUTS( "Не удалось распарсить датасет задач" );
-		return EXIT_FAILURE;
+		goto _cluster_init_failure;
 	}
 
 	status = cluster_node_network_from_dataset( c, cf );
 	
 	if ( _IS_ERROR( status ) ) {
 		_ERROR_PUTS( "Не удалось распарсить датасет узлов" );
-		return EXIT_FAILURE;
+		goto _cluster_init_failure;
 	}
 
 	_populate_node_registry( c );
 	
 	_reset_statistics( &( c->statistics ) );
 
-	s->init( s, c->node_registry, c->node_count );
+	if ( s->init( s, c->node_registry, c->node_count ) ) {
+		_ERROR_PUTS( "Не удалось инициализировать планировщик" );
+		goto _cluster_init_failure;
+	} 
+		
 	c->scheduler = s;
 
 	_DEBUG_PUTS( "Кластер инициализирован" );
@@ -53,6 +57,10 @@ cluster_init( __STATE__       cluster_t   *c,
 	srand( time( NULL) );
 	
 	return EXIT_SUCCESS;
+
+_cluster_init_failure:
+	cluster_destroy( c );
+	return EXIT_FAILURE;	
 }
 
 
