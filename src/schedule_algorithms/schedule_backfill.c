@@ -9,34 +9,24 @@
 
 
 #define _next( LIST ) LIST->sched_info
-// потому что лень делать лишнюю структуру
-// эти макросы ЗАПРЕЩАЕТСЯ применять на тех задачах,
-// которым присвоен узел, т.е. это только для навигации по очередям
-// (в частности по кандидатам для бэкфила в bcan в schedule_backfill)
-#define _prev( LIST )           LIST->prev_on_node
-#define _next_candidate( LIST ) LIST->next_on_node
 
 
-job_list_t *_get_backfill_candidates( __STATE__       job_list_t *jl,
-									  __STATE__       node_t*    *nodes,
-									  __IN__    const size_t      node_count );
-
-job_list_t *_place_by_priority( __STATE__ job_list_t *jlist,
-								__STATE__ job_list_t *j );
-
-job_list_t *_place_by_wait_time( __STATE__ job_list_t *jlist,
-								 __STATE__ job_list_t *j );
-
-job_list_t *_remove_job_from_queue( __STATE__ job_list_t *prev,
-									__STATE__ job_list_t *jl );
-
-bool _try_allocate_first_job( __STATE__       job_list_t *jl,
+static job_list_t *_backfill( __STATE__       job_list_t *q,
 							  __STATE__       node_t*    *nodes,
 							  __IN__    const size_t      node_count );
 
-job_list_t *_try_backfill_jobs( __STATE__       job_list_t *bcan,
-								__STATE__       node_t*    *nodes,
-								__IN__    const size_t      node_count );
+static job_list_t *_place_by_priority( __STATE__ job_list_t *jlist,
+									   __STATE__ job_list_t *j );
+
+static job_list_t *_place_by_wait_time( __STATE__ job_list_t *jlist,
+										__STATE__ job_list_t *j );
+
+static job_list_t *_remove_job_from_queue( __STATE__ job_list_t *prev,
+										   __STATE__ job_list_t *jl );
+
+static bool _try_allocate_first_job( __STATE__       job_list_t *jl,
+									 __STATE__       node_t*    *nodes,
+									 __IN__    const size_t      node_count );
 
 
 void
@@ -62,12 +52,7 @@ schedule_backfill( __STATE__       scheduler_t *s,
 
 	if ( ! queue ) return;
 
-	job_list_t *bcan = _get_backfill_candidates( queue, n, n_count );
-	job_list_t *new_queue = NULL;
-	
-	if ( bcan ) new_queue = _try_backfill_jobs( bcan, n, n_count );
-
-	if ( new_queue ) s->state = new_queue;
+	/* s->state = new_queue; */
 }
 
 
@@ -144,81 +129,11 @@ print_backfill( __IN__ scheduler_t *s )
 
 
 job_list_t *
-_get_backfill_candidates( __STATE__       job_list_t *q,
-						  __STATE__       node_t*    *nodes,
-						  __IN__    const size_t      node_count )
+_backfill( __STATE__       job_list_t *q,
+		   __STATE__       node_t*    *nodes,
+		   __IN__    const size_t      node_count )
 {
-	job_t *j = &( q->job );
-	
-	job_list_t *last_job = NULL;
-	node_t *best_node = nodes[ 0 ];
-	quantum_t best_shadow_time = ULLONG_MAX;
-	
-	for ( int i = 0; i < node_count; ++i ) {
-		job_list_t *rjlist = nodes[ i ]->jobs;
-		
-		size_t future_free_threads = 0;
-		
-		for ( ; rjlist; rjlist = rjlist->next_on_node ) {
-			job_t *rj = &( rjlist->job );
-			
-			future_free_threads += rj->thread_count;
-			
-			if ( future_free_threads > j->thread_count ) {
-				quantum_t shadow_time = rj->time_before_start
-					                  + rj->estimated_time
-					                  - rj->exec_time;
 
-				if ( best_shadow_time > shadow_time ) {
-					best_node = nodes[ i ];
-					last_job = rjlist;
-					best_shadow_time = shadow_time;
-				}
-			}
-		}
-	}
-
-	size_t thread_headr = best_node->cpu_count * best_node->thread_count - j->thread_count;
-	job_list_t *bcan = NULL, *bcan_current = NULL;
-
-	job_list_t *rjlist = last_job;
-
-	for ( ; rjlist; rjlist = rjlist->next_on_node )
-		thread_headr += rjlist->job.thread_count;
-	
-	q = _next( q );
-	
-	for ( ; q; q = _next( q ) ) {
-		j = &( q->job );
-		
-		for ( int i = 0; i < node_count; ++i ) {
-			size_t thread_occupation = 0;
-			
-			if ( nodes[ i ] == best_node ) {
-				if ( cluster_get_total_time_for_job( j, nodes[ i ] ) < best_shadow_time
-					 || j->thread_count < thread_headr )
-					goto _new_backfill_candidate;
-			}
-			else if ( j->thread_count < thread_occupation )
-				goto _new_backfill_candidate;
-		}
-		
-		continue;
-
-_new_backfill_candidate:
-		if ( ! bcan ) {
-			bcan = q;
-			bcan_current = bcan;
-		}
-		else {
-			_next_candidate( bcan_current ) = q;
-			bcan_current = q;
-		}
-
-		_next_candidate( bcan ) = NULL;
-	}
-	
-	return bcan;
 }
 
 
@@ -230,7 +145,6 @@ _place_by_priority( __STATE__ job_list_t *jlist,
 
 	if ( j->priority <= jlist->job.priority ) {
 		_next( jl ) = jlist;
-		_prev( jl ) = NULL;
 		return jl;
 	}
 
@@ -242,20 +156,14 @@ _place_by_priority( __STATE__ job_list_t *jlist,
 	for ( ; current; current = _next( current ) ) {
 		if ( j->priority <= current->job.priority ) {
 			_next( end ) = jl;
-			_prev( current ) = jl;
-			
 			_next( jl ) = current;
-			_prev( jl ) = end;
-			
 			return jlist;
 		}
 		end = current;
 	}
 
 	_next( end ) = jl;
-	
 	_next( jl ) = NULL;
-	_prev( jl ) = end;
 
 	return jlist;
 }
@@ -269,7 +177,6 @@ _place_by_wait_time( __STATE__ job_list_t *jlist,
 
 	if ( j->wait_time < jlist->job.wait_time ) {
 		_next( jl ) = jlist;
-		_prev( jl ) = NULL;
 		return jl;
 	}
 
@@ -287,9 +194,7 @@ _place_by_wait_time( __STATE__ job_list_t *jlist,
 	}
 
 	_next( end ) = jl;
-	
 	_next( jl ) = NULL;
-	_prev( jl ) = end;
 
 	return jlist;
 }
@@ -305,13 +210,9 @@ _remove_job_from_queue( __STATE__ job_list_t *prev,
 	
 	// ЗДЕСЬ НЕЛЬЗЯ ПЕРЕЗАПИСЫВАТЬ _prev ИЛИ _next_candidate
 	
-	if ( ! prev ) {
-		if ( end ) _prev( end ) = NULL;
-		return end;
-	}
+	if ( ! prev ) return end;
 
 	_next( prev ) = end;
-	if ( end ) _prev( end ) = prev;
 	
 	return end;
 }
@@ -331,28 +232,4 @@ _try_allocate_first_job( __STATE__       job_list_t *jl,
 		}
 	
 	return false;
-}
-
-
-job_list_t *
-_try_backfill_jobs( __STATE__       job_list_t *bcan,
-					__STATE__       node_t*    *nodes,
-					__IN__    const size_t      node_count )
-{
-	job_list_t *new_queue = NULL;
-	
-	while ( bcan ) {
-		job_list_t *next_candidate = _next_candidate( bcan );
-		job_list_t *prev = _prev( bcan );
-		job_list_t *next = _next( bcan );
-		
-		if ( _try_allocate_first_job( bcan, nodes, node_count ) ) {
-			_remove_job_from_queue( prev, bcan );
-			if ( ! prev ) new_queue = next;
-		}
-		
-		bcan = next_candidate;
-	}
-
-	return new_queue;
 }

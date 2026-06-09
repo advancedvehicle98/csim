@@ -21,11 +21,15 @@ OBJ = main.o \
 	cluster/node/print_node_status.o \
 	cluster/node/put_job_to_node.o \
 	cluster/node/remove_job_from_node.o \
+	cluster/node/reserve_job_on_node.o \
 	cluster/node/update_node.o \
 	cluster/statistics/print_statistics.o \
 	schedule_algorithms/schedule_backfill.o \
 	schedule_algorithms/schedule_fifo.o \
-	schedule_algorithms/schedule_priority.o
+	schedule_algorithms/schedule_priority.o \
+	schedule_algorithms/schedule_round_robin.o
+
+#	schedule_algorithms/schedule_depenedncy_aware.o \
 
 BUILD_DIR = ./build
 SRC_DIR   = ./src

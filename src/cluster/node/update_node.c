@@ -1,5 +1,7 @@
 #include <cluster/node.h>
 
+#include <stdlib.h>
+
 
 static __INLINE __PURE bool _is_node_free( __IN__ const node_t *n );
 
@@ -12,6 +14,8 @@ static __INLINE void _update_average_memory_load( __STATE__ node_t       *n,
 static __INLINE void _update_average_stall_time( __STATE__ node_t       *n,
 												 __STATE__ statistics_t *s );
 
+static __INLINE void _update_reservations( __STATE__ node_t *n );
+
 
 void
 cluster_update_node( __STATE__ node_t       *n,
@@ -20,6 +24,7 @@ cluster_update_node( __STATE__ node_t       *n,
 	// в основном статистика + возможно какое-то изменение
 	// частоты процов
 
+	_update_reservations( n );
 	_update_average_stall_time( n, s );
 	_update_average_memory_load( n, s );
 	_update_average_cpu_load( n, s );
@@ -93,5 +98,35 @@ _update_average_stall_time( __STATE__ node_t       *n,
 		++( s->average_stall_time_sc );
 		
 		n->load_stats.node_stall_time = 0;
+	}
+}
+
+
+void
+_update_reservations( __STATE__ node_t *n )
+{
+	job_reservation_t *jres = n->reservations;
+
+	if ( ! jres ) return;
+	
+	while ( jres ) {
+		--( jres->time_before_assign );
+
+		if ( jres->time_before_assign != 0 ) {
+			jres = jres->next;
+			continue;
+		}
+
+		job_list_t *jlist = jres->job_entry;
+		job_reservation_t *next = jres->next, *prev = jres->prev;
+
+		free( jres );
+
+		cluster_put_job_to_node( jlist, n );
+
+		if ( prev ) prev->next = next;
+		if ( next ) next->prev = prev;
+		
+		jres = next;
 	}
 }

@@ -216,10 +216,11 @@ _parse_bus( __OUT__ interconnect_list_t *ilist,
 			++term;
 		}
 
-		n[ i ].cpu_count = cpu_count;
-		n[ i ].exec_rate = n[ i ].max_exec_rate;
-		n[ i ].ic        = &ilist->ic;
-		n[ i ].jobs      = NULL;
+		n[ i ].cpu_count    = cpu_count;
+		n[ i ].exec_rate    = n[ i ].max_exec_rate;
+		n[ i ].ic           = &ilist->ic;
+		n[ i ].jobs         = NULL;
+		n[ i ].reservations = NULL;
 		
 		cluster_get_feature_string( n[ i ].feature_str, n[ i ].features );
 			

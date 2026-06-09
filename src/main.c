@@ -97,6 +97,16 @@ get_schedule_functions( scheduler_t *s, const char *type )
 		return EXIT_SUCCESS;
 	}
 	
+	if ( _STR_EQUAL( type, "round_robin" ) ) {
+		s->schedule   = schedule_round_robin;
+		s->init       = init_round_robin;
+		s->distribute = distribute_round_robin;
+		s->destroy    = destroy_round_robin;
+		s->print      = print_round_robin;
+		
+		return EXIT_SUCCESS;
+	}
+	
 	return EXIT_FAILURE;
 }
 

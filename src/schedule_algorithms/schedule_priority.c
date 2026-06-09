@@ -93,7 +93,7 @@ schedule_priority( __STATE__       scheduler_t *s,
 			continue;
 		}
 
-		if ( j->wait_time < p->min_time_to_free ) {
+		if ( j->max_wait_time - j->wait_time < p->min_time_to_free ) {
 			if ( ! prev_rest )
 				p->by_priority = (job_list_t *) rest->sched_info;
 			else 

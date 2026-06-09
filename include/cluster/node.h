@@ -49,6 +49,14 @@ typedef struct _node_occupation_t {
 } node_occupation_t;
 
 
+// для резервации места на узлах
+typedef struct _job_reservation_t {
+	quantum_t   time_before_assign;
+	job_list_t *job_entry;
+	struct _job_reservation_t *next, *prev;
+} job_reservation_t;
+
+
 typedef struct _node_t {
 	char name[ MAX_NODE_NAME_SIZE ];
 
@@ -86,6 +94,9 @@ typedef struct _node_t {
 
 	// господин просит больше указателей
 	job_list_t *jobs;
+
+	// зарезервированные задачи
+	job_reservation_t *reservations;
 } node_t;
 
 
@@ -111,6 +122,10 @@ void cluster_put_job_to_node( __STATE__ job_list_t *jlist,
 							  __STATE__ node_t     *n );
 
 void cluster_remove_job_from_node( __STATE__ job_list_t *jlist );
+
+void cluster_reserve_job_on_node( __STATE__ job_list_t *jlist,
+								  __STATE__ node_t     *n,
+								  __IN__    quantum_t   t );
 
 void cluster_update_node( __STATE__ node_t *n,
 						  __STATE__ statistics_t *s );
